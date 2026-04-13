@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
@@ -11,57 +12,64 @@ export default function HomePage() {
 
       <main>
         {/* ── Hero Section ─────────────────────────────────────────── */}
-        <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-primary">
-          <div className="absolute inset-0 z-0">
-            <div className="w-full h-full bg-gradient-to-br from-primary via-primary-container to-primary opacity-90" />
-            <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-transparent to-transparent" />
-          </div>
+        <section className="relative overflow-hidden bg-primary">
+          <div className="max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 min-h-[60vh]">
 
-          <div className="relative z-10 max-w-screen-2xl mx-auto px-6 w-full py-24 text-white">
-            <div className="max-w-3xl">
+            {/* Left — copy */}
+            <div className="relative z-10 flex flex-col justify-center px-8 md:px-16 py-14 text-white">
               <span className="inline-block text-xs font-bold tracking-[0.2em] text-emerald-400 mb-4 uppercase font-label">
                 SERIE KINETIC / 01
               </span>
-              <h1 className="text-7xl md:text-9xl font-black leading-[0.85] tracking-tighter mb-8 font-headline">
+              <h1 className="text-6xl md:text-8xl font-black leading-[0.85] tracking-tighter mb-8 font-headline">
                 VIVE LA<br />EMOCIÓN DEL<br />
                 <span className="text-emerald-400 italic underline decoration-4 underline-offset-8">
                   UNBOXING.
                 </span>
               </h1>
-              <p className="text-xl text-zinc-100 font-medium max-w-lg mb-12 leading-relaxed">
-                Jerseys auténticos de las mejores ligas y selecciones, entregados con precisión técnica.
-                Descubre el tesoro que el azar tiene para ti.
+              <p className="text-lg text-zinc-100 font-medium max-w-md mb-12 leading-relaxed">
+                Jerseys de las mejores ligas y selecciones del mundo.
+                Cada caja es una jugada inesperada
               </p>
-              <div className="flex flex-wrap gap-6">
+              <div className="flex flex-wrap gap-4">
                 <Link
                   href="/cajas"
-                  className="bg-white text-primary px-10 py-5 rounded-lg font-bold uppercase tracking-widest text-sm shadow-2xl hover:bg-emerald-50 transition-all"
+                  className="bg-white text-primary px-8 py-4 rounded-lg font-bold uppercase tracking-widest text-sm shadow-2xl hover:bg-emerald-50 transition-all"
                 >
                   Empieza tu Colección
                 </Link>
-                <button className="bg-transparent border-2 border-white/40 text-white px-10 py-5 rounded-lg font-bold uppercase tracking-widest text-sm hover:bg-white/10 transition-colors flex items-center gap-2">
+                <button className="bg-transparent border-2 border-white/40 text-white px-8 py-4 rounded-lg font-bold uppercase tracking-widest text-sm hover:bg-white/10 transition-colors flex items-center gap-2">
                   <span className="material-symbols-outlined">play_circle</span>
                   Ver Unboxing
                 </button>
               </div>
+
+            </div>
+
+            {/* Right — imagen */}
+            <div className="relative hidden lg:block">
+              <Image
+                src="/banner.png"
+                alt="Banner La Cascarita"
+                fill
+                className="object-cover"
+                style={{ objectPosition: '-550px center' }}
+                priority
+              />
+              {/* degradado de fusión hacia la izquierda */}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/10 to-transparent" />
             </div>
           </div>
 
-          {/* Live Status Floating */}
-          <div className="absolute bottom-12 right-12 hidden lg:block">
-            <div className="p-6 border border-white/20 rounded-xl space-y-4 backdrop-blur-xl bg-white/10 text-white">
-              <div className="flex justify-between items-center gap-12">
-                <span className="text-[10px] font-bold tracking-widest uppercase text-emerald-400">
-                  Stock en Tiempo Real
-                </span>
-                <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              </div>
-              <div className="space-y-1">
-                <div className="text-xs font-medium text-emerald-100/70 uppercase tracking-tighter">Lote Actual</div>
-                <div className="text-xl font-black italic">12,450 UNIDADES / SERIE 01</div>
-              </div>
-            </div>
+          {/* Imagen en mobile — strip debajo del copy */}
+          <div className="relative lg:hidden w-full h-56 sm:h-72">
+            <Image
+              src="/banner.png"
+              alt="Banner La Cascarita"
+              fill
+              className="object-cover object-top"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-primary/60 to-transparent" />
           </div>
         </section>
 
@@ -73,7 +81,7 @@ export default function HomePage() {
               <span className="material-symbols-outlined text-emerald-400 text-4xl">local_shipping</span>
               <span className="text-white text-4xl md:text-6xl font-black uppercase tracking-tighter opacity-70 font-headline">ENTREGA INMEDIATA</span>
               <span className="material-symbols-outlined text-emerald-400 text-4xl">rocket_launch</span>
-              <span className="text-white text-4xl md:text-6xl font-black uppercase tracking-tighter opacity-70 font-headline">PRODUCTO ORIGINAL</span>
+              <span className="text-white text-4xl md:text-6xl font-black uppercase tracking-tighter opacity-70 font-headline">CALIDAD TOP</span>
               <span className="material-symbols-outlined text-emerald-400 text-4xl">verified</span>
             </div>
             <div className="flex gap-20 items-center pr-20">
@@ -81,7 +89,7 @@ export default function HomePage() {
               <span className="material-symbols-outlined text-emerald-400 text-4xl">local_shipping</span>
               <span className="text-white text-4xl md:text-6xl font-black uppercase tracking-tighter opacity-70 font-headline">ENTREGA INMEDIATA</span>
               <span className="material-symbols-outlined text-emerald-400 text-4xl">rocket_launch</span>
-              <span className="text-white text-4xl md:text-6xl font-black uppercase tracking-tighter opacity-70 font-headline">PRODUCTO ORIGINAL</span>
+              <span className="text-white text-4xl md:text-6xl font-black uppercase tracking-tighter opacity-70 font-headline">CALIDAD TOP</span>
               <span className="material-symbols-outlined text-emerald-400 text-4xl">verified</span>
             </div>
           </div>
@@ -108,8 +116,15 @@ export default function HomePage() {
                   <span className="text-xs font-bold tracking-widest text-on-surface-variant uppercase font-label">01 JERSEY / EL DEBUTANTE</span>
                   <span className="bg-primary text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">KIT BASE</span>
                 </div>
-                <div className="w-full aspect-square bg-surface-container mb-8 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-6xl text-outline-variant">inventory_2</span>
+                <div className="relative w-full aspect-square mb-8 overflow-hidden">
+                  <div className="absolute inset-0 translate-y-10">
+                    <Image
+                      src="/playera_1.png"
+                      alt="Jersey La Inicial"
+                      fill
+                      className="object-cover object-top"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-2xl font-black tracking-tight text-on-surface uppercase font-headline">La Inicial</h3>
@@ -128,43 +143,56 @@ export default function HomePage() {
             </div>
 
             {/* Tier 2: Destacado */}
-            <div className="md:col-span-8 bg-primary p-12 text-white relative overflow-hidden group">
-              <div className="relative z-10 h-full flex flex-col justify-between">
+            <div className="md:col-span-8 overflow-hidden group grid grid-cols-1 md:grid-cols-[3fr_2fr] min-h-[480px]">
+
+              {/* Panel izquierdo — imagen sin padding, sangra hasta los bordes */}
+              <div className="relative bg-emerald-950 min-h-[420px]">
+                <Image
+                  src="/playeras.png"
+                  alt="Playeras La Cascarita"
+                  fill
+                  className="object-cover object-center"
+                />
+                {/* velo sutil en la parte inferior para fusionar con el copy */}
+                <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-emerald-950/60 to-transparent" />
+                <span className="absolute top-5 left-5 bg-emerald-400 text-emerald-950 px-3 py-1 text-[10px] font-black uppercase tracking-widest z-10">
+                  PROMO 3×2
+                </span>
+              </div>
+
+              {/* Panel derecho — copy sobre blanco */}
+              <div className="bg-white flex flex-col justify-center px-10 py-12 gap-7">
                 <div>
-                  <div className="flex flex-wrap justify-between items-start mb-8 gap-4">
-                    <span className="text-xs font-bold tracking-widest text-emerald-400 uppercase font-label">03 JERSEYS / EL HAT-TRICK</span>
-                    <div className="flex gap-2">
-                      <span className="bg-emerald-400 text-primary px-4 py-1 text-xs font-black uppercase tracking-widest">PROMO 3x2</span>
-                      <span className="bg-white/10 backdrop-blur-sm text-white px-4 py-1 text-xs font-bold uppercase tracking-widest">Lo más vendido</span>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div className="space-y-6">
-                      <h3 className="text-6xl font-black tracking-tighter uppercase leading-[0.9] font-headline">Dominio Total</h3>
-                      <p className="text-zinc-300 text-lg leading-relaxed max-w-sm">
-                        Paga dos, recibe tres. Nuestra caja de mayor valor para coleccionistas serios.
-                      </p>
-                      <div className="flex items-baseline gap-4">
-                        <span className="text-6xl font-black text-emerald-400 font-headline">$3,299</span>
-                        <span className="text-xl text-emerald-900 line-through font-bold">$4,350</span>
-                      </div>
-                      <Link
-                        href="/cajas?box=hat-trick"
-                        className="inline-block bg-white text-primary px-10 py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-400 hover:text-primary transition-colors"
-                      >
-                        Asegurar este nivel
-                      </Link>
-                    </div>
-                    <div className="hidden md:flex items-center justify-center">
-                      <span className="material-symbols-outlined text-[8rem] text-white/20">inventory_2</span>
-                    </div>
-                  </div>
+                  <p className="text-[10px] font-bold tracking-[0.25em] text-zinc-400 uppercase mb-3">
+                    03 Jerseys · Hat-Trick
+                  </p>
+                  <h3 className="text-5xl font-black tracking-tighter uppercase leading-[0.9] text-zinc-950 font-headline">
+                    Dominio<br />Total
+                  </h3>
+                </div>
+
+                <p className="text-sm text-zinc-500 leading-relaxed">
+                  Paga dos, recibe tres. La caja de mayor valor para coleccionistas serios.
+                </p>
+
+                <div className="flex items-baseline gap-3">
+                  <span className="text-4xl font-black text-zinc-950 font-headline">$3,299</span>
+                  <span className="text-sm text-zinc-400 line-through font-bold">$4,350 MXN</span>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Link
+                    href="/cajas?box=hat-trick"
+                    className="flex items-center justify-between bg-zinc-950 text-white px-6 py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-950 transition-colors group/btn"
+                  >
+                    Comprar ahora
+                    <span className="material-symbols-outlined text-base group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+                  </Link>
+                  <p className="text-[10px] text-zinc-400 font-medium text-center uppercase tracking-widest">
+                    Envío gratis · Lo más vendido
+                  </p>
                 </div>
               </div>
-              <div
-                className="absolute inset-0 opacity-5 pointer-events-none"
-                style={{ backgroundImage: 'radial-gradient(circle, #4ade80 1px, transparent 1px)', backgroundSize: '30px 30px' }}
-              />
             </div>
 
             {/* Tier 3: Jersey Club */}

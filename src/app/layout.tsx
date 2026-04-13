@@ -17,9 +17,9 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: 'LA CASCARITA | Jersey Club',
-  description: 'Jerseys auténticos de las mejores ligas y selecciones. Mystery boxes curadas con precisión técnica.',
+  description: 'Jerseys auténticos de las mejores ligas y selecciones del mundo.',
   icons: {
-    icon: '/favicon.svg',
+    icon: '/favicon.png',
   },
 }
 
