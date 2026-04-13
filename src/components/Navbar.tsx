@@ -3,17 +3,25 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
+import { useCart } from '@/context/CartContext'
 
 const links = [
-  { label: 'Jerseys', href: '/cajas' },
   { label: 'Mystery Box', href: '/cajas' },
-  { label: 'Colección 2024', href: '/cajas' },
-  { label: 'Rastrear Pedido', href: '/rastreo' },
+  { label: 'Envíos', href: '/envios' },
+  { label: 'Contacto', href: '/contacto' },
 ]
 
 export default function Navbar() {
   const pathname = usePathname()
   const { data: session } = useSession()
+  const { totalItems } = useCart()
+
+  function isActive(href: string) {
+    if (href === '/cajas') {
+      return pathname === '/cajas' || pathname.startsWith('/configurar')
+    }
+    return pathname === href
+  }
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-zinc-100 w-full">
@@ -28,7 +36,7 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 className={`font-bold uppercase tracking-wider text-sm transition-colors ${
-                  pathname === link.href
+                  isActive(link.href)
                     ? 'text-primary border-b-2 border-primary pb-1'
                     : 'text-zinc-500 hover:text-primary'
                 }`}
@@ -40,9 +48,15 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-6">
-          <button className="material-symbols-outlined text-primary">
-            shopping_bag
-          </button>
+          {/* Cart icon with badge */}
+          <Link href="/carrito" className="relative">
+            <span className="material-symbols-outlined text-primary text-[28px]">shopping_bag</span>
+            {totalItems > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center leading-none">
+                {totalItems > 9 ? '9+' : totalItems}
+              </span>
+            )}
+          </Link>
 
           {session ? (
             <div className="flex items-center gap-3">

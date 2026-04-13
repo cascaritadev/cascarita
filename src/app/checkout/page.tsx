@@ -6,10 +6,10 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
 const BOX_INFO: Record<string, { name: string; price: number; priceDisplay: string; originalPrice: string }> = {
-  debutante: { name: 'Debutante (1 Jersey)', price: 119900, priceDisplay: '$1,199.00', originalPrice: '$1,450.00' },
-  doble: { name: 'Doble (2 Jerseys)', price: 219900, priceDisplay: '$2,199.00', originalPrice: '$2,900.00' },
-  'hat-trick': { name: 'Hat-Trick (3 Jerseys)', price: 329900, priceDisplay: '$3,299.00', originalPrice: '$4,350.00' },
-  'jersey-club': { name: 'Jersey Club (4 Jerseys)', price: 349900, priceDisplay: '$3,499.00', originalPrice: '$5,800.00' },
+  debutante: { name: 'Debutante (1 Jersey)', price: 89900, priceDisplay: '$899.00', originalPrice: '$1,199.00' },
+  doble: { name: 'Doble (2 Jerseys)', price: 159900, priceDisplay: '$1,599.00', originalPrice: '$2,399.00' },
+  'hat-trick': { name: 'Hat-Trick (3 Jerseys)', price: 259900, priceDisplay: '$2,599.00', originalPrice: '$3,599.00' },
+  'jersey-club': { name: 'Jersey Club (4 Jerseys)', price: 339900, priceDisplay: '$3,399.00', originalPrice: '$4,799.00' },
 }
 
 function CheckoutContent() {

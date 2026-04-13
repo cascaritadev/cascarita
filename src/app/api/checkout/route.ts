@@ -4,11 +4,16 @@ import { z } from 'zod'
 import { getStripe, BOX_PRICES } from '@/lib/stripe'
 import { authOptions } from '@/lib/auth'
 
-const CheckoutSchema = z.object({
+const CartItemSchema = z.object({
   boxId: z.enum(['debutante', 'doble', 'hat-trick', 'jersey-club']),
   categoria: z.string().min(1),
   talla: z.string().min(1),
+  tipo: z.string().min(1), // 'actual' | 'mundialista' | 'retro'
   exclusiones: z.array(z.string()).max(5).optional(),
+})
+
+const CheckoutSchema = z.object({
+  items: z.array(CartItemSchema).min(1).max(10),
 })
 
 export async function POST(req: NextRequest) {
@@ -23,39 +28,54 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const { boxId, categoria, talla, exclusiones = [] } = parsed.data
+    const { items } = parsed.data
     const session = await getServerSession(authOptions)
-    const boxInfo = BOX_PRICES[boxId]
     const baseUrl = process.env.NEXTAUTH_URL ?? 'http://localhost:3000'
 
-    // Metadata que viajará con la sesión de Stripe
+    // Build Stripe line_items from cart
+    const line_items = items.map((item) => {
+      const boxInfo = BOX_PRICES[item.boxId]
+      return {
+        quantity: 1,
+        price_data: {
+          currency: 'mxn',
+          unit_amount: boxInfo.price,
+          product_data: {
+            name: boxInfo.name,
+            description: [
+              boxInfo.description,
+              `Tipo: ${item.tipo}`,
+              `Categoría: ${item.categoria}`,
+              `Talla: ${item.talla}`,
+              item.exclusiones?.length ? `Sin: ${item.exclusiones.join(', ')}` : '',
+            ]
+              .filter(Boolean)
+              .join(' · '),
+            metadata: { boxId: item.boxId },
+          },
+        },
+      }
+    })
+
+    // Summary metadata for webhook
     const metadata: Record<string, string> = {
-      boxId,
-      categoria,
-      talla,
-      exclusiones: exclusiones.join(','),
       userId: session?.user?.id ?? '',
       userEmail: session?.user?.email ?? '',
+      items: JSON.stringify(
+        items.map((i) => ({
+          boxId: i.boxId,
+          categoria: i.categoria,
+          talla: i.talla,
+          tipo: i.tipo,
+          exclusiones: (i.exclusiones ?? []).join(','),
+        }))
+      ),
     }
 
     const checkoutSession = await getStripe().checkout.sessions.create({
       mode: 'payment',
       currency: 'mxn',
-      line_items: [
-        {
-          quantity: 1,
-          price_data: {
-            currency: 'mxn',
-            unit_amount: boxInfo.price,
-            product_data: {
-              name: boxInfo.name,
-              description: `${boxInfo.description} · Categoría: ${categoria} · Talla: ${talla}`,
-              metadata: { boxId },
-            },
-          },
-        },
-      ],
-      // Stripe recopila la dirección de envío
+      line_items,
       shipping_address_collection: {
         allowed_countries: ['MX'],
       },
@@ -75,7 +95,7 @@ export async function POST(req: NextRequest) {
       customer_email: session?.user?.email ?? undefined,
       metadata,
       success_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}/cajas`,
+      cancel_url: `${baseUrl}/carrito`,
       locale: 'es',
     })
 

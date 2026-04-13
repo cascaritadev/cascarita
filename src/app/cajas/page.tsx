@@ -12,9 +12,9 @@ const BOXES = [
     name: 'Debutante',
     subtitle: 'Single Authentic Jersey',
     jerseys: 1,
-    price: 119900,
-    priceDisplay: '$1,199',
-    originalPrice: '$1,450',
+    price: 89900,
+    priceDisplay: '$899',
+    originalPrice: '$1,199',
     tag: 'KIT BASE',
     categorias: ['Liga MX', 'Internacional', 'Selecciones'],
     featured: false,
@@ -24,9 +24,9 @@ const BOXES = [
     name: 'Doble',
     subtitle: 'Duo Kit Bundle',
     jerseys: 2,
-    price: 219900,
-    priceDisplay: '$2,199',
-    originalPrice: '$2,900',
+    price: 159900,
+    priceDisplay: '$1,599',
+    originalPrice: '$2,399',
     tag: null,
     categorias: ['Liga MX', 'Internacional', 'Selecciones'],
     featured: false,
@@ -36,10 +36,10 @@ const BOXES = [
     name: 'Hat-Trick',
     subtitle: 'Triple Performance Pack',
     jerseys: 3,
-    price: 329900,
-    priceDisplay: '$3,299',
-    originalPrice: '$4,350',
-    tag: 'PROMO 3x2',
+    price: 259900,
+    priceDisplay: '$2,599',
+    originalPrice: '$3,599',
+    tag: 'TRIPLE PACK',
     categorias: ['Internacional', 'Liga MX', 'Selecciones'],
     featured: false,
   },
@@ -48,9 +48,9 @@ const BOXES = [
     name: 'Jersey Club',
     subtitle: 'Ultimate Curator\'s Pack',
     jerseys: 4,
-    price: 349900,
-    priceDisplay: '$3,499',
-    originalPrice: '$5,800',
+    price: 339900,
+    priceDisplay: '$3,399',
+    originalPrice: '$4,799',
     tag: 'MEJOR VALOR',
     categorias: ['Mix (Recomendado)', 'Internacional', 'Liga MX'],
     featured: true,
@@ -104,7 +104,7 @@ export default function CajasPage() {
               {box.featured && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 px-6 py-1 rounded-full border-2 border-white bg-gradient-to-r from-primary to-primary-container">
                   <span className="text-[10px] font-black text-white uppercase tracking-[0.2em] whitespace-nowrap">
-                    Mejor Valor / 3x2 Promo
+                    Mejor Valor
                   </span>
                 </div>
               )}

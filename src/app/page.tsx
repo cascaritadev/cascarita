@@ -142,7 +142,7 @@ export default function HomePage() {
                   {/* Badge de ahorro */}
                   <div className="absolute top-3 left-3 bg-emerald-500 text-white rounded-full w-14 h-14 flex flex-col items-center justify-center shadow-lg z-10">
                     <span className="text-[9px] font-black leading-none uppercase">AHORRAS</span>
-                    <span className="text-sm font-black leading-tight">$251</span>
+                    <span className="text-sm font-black leading-tight">$300</span>
                   </div>
                 </div>
 
@@ -174,19 +174,19 @@ export default function HomePage() {
               <div className="px-8 pb-8">
                 <div className="flex items-end justify-between mb-4">
                   <div>
-                    <span className="text-xs text-zinc-400 line-through font-bold block">$1,450.00 MXN</span>
+                    <span className="text-xs text-zinc-400 line-through font-bold block">$1,199.00 MXN</span>
                     <span className="text-4xl font-black text-on-surface font-headline leading-none">
-                      $1,199<span className="text-lg">.00</span>
+                      $899<span className="text-lg">.00</span>
                     </span>
                     <span className="text-[10px] text-zinc-400 font-medium block mt-0.5">MXN · IVA incluido</span>
                   </div>
                   <div className="text-right">
                     <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wide block">Ahorras</span>
-                    <span className="text-xl font-black text-emerald-600">$251</span>
+                    <span className="text-xl font-black text-emerald-600">$300</span>
                   </div>
                 </div>
                 <Link
-                  href="/cajas?box=debutante"
+                  href="/configurar?box=debutante&categoria=Liga%20MX"
                   className="flex items-center justify-between w-full bg-primary text-white px-6 py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-800 transition-colors group/btn"
                 >
                   Quiero Este Kit
@@ -209,7 +209,7 @@ export default function HomePage() {
                 {/* velo sutil en la parte inferior para fusionar con el copy */}
                 <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-emerald-950/60 to-transparent" />
                 <span className="absolute top-5 left-5 bg-emerald-400 text-emerald-950 px-3 py-1 text-[10px] font-black uppercase tracking-widest z-10">
-                  PROMO 3×2
+                  TRIPLE PACK
                 </span>
               </div>
 
@@ -220,22 +220,22 @@ export default function HomePage() {
                     03 Jerseys · Hat-Trick
                   </p>
                   <h3 className="text-5xl font-black tracking-tighter uppercase leading-[0.9] text-zinc-950 font-headline">
-                    Hat-Trick<br />Total
+                    Hat-Trick<br />
                   </h3>
                 </div>
 
                 <p className="text-sm text-zinc-500 leading-relaxed">
-                  Paga dos, recibe tres. La caja de mayor valor para coleccionistas serios.
+                  La caja de mayor valor para coleccionistas serios.
                 </p>
 
                 <div className="flex items-baseline gap-3">
-                  <span className="text-4xl font-black text-zinc-950 font-headline">$3,299</span>
-                  <span className="text-sm text-zinc-400 line-through font-bold">$4,350 MXN</span>
+                  <span className="text-4xl font-black text-zinc-950 font-headline">$2,599</span>
+                  <span className="text-sm text-zinc-400 line-through font-bold">$3,599 MXN</span>
                 </div>
 
                 <div className="flex flex-col gap-2">
                   <Link
-                    href="/cajas?box=hat-trick"
+                    href="/configurar?box=hat-trick&categoria=Internacional"
                     className="flex items-center justify-between bg-primary text-white px-6 py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-800 transition-colors group/btn"
                   >
                     Quiero Este Kit
@@ -268,11 +268,11 @@ export default function HomePage() {
                   <h3 className="text-3xl font-black text-on-surface uppercase tracking-tighter font-headline">La Escuadra Completa</h3>
                   <p className="text-sm text-on-surface-variant">La experiencia definitiva. 4 jerseys auténticos.</p>
                   <div className="flex flex-col">
-                    <span className="text-sm text-zinc-400 line-through font-bold">$5,800.00 MXN</span>
-                    <span className="text-4xl font-black text-primary font-headline">$3,499.00</span>
+                    <span className="text-sm text-zinc-400 line-through font-bold">$4,799.00 MXN</span>
+                    <span className="text-4xl font-black text-primary font-headline">$3,399.00</span>
                   </div>
                   <Link
-                    href="/cajas?box=jersey-club"
+                    href="/configurar?box=jersey-club&categoria=Mix%20(Recomendado)"
                     className="flex items-center justify-between w-full bg-primary text-white px-6 py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-800 transition-colors group/btn"
                   >
                     Quiero Este Kit
@@ -335,19 +335,20 @@ export default function HomePage() {
                 <span className="text-primary underline decoration-emerald-400">Identidad.</span>
               </h2>
               <p className="text-xl text-on-surface-variant font-medium leading-relaxed max-w-lg">
-                No solo vendemos jerseys. Curamos momentos de pura adrenalina. Cada caja es un boleto a una historia.
+                No eliges un jersey… eliges vivir la emoción de descubrirlo.
+                Cada mystery box es una jugada inesperada, puede ser ese club que amas, esa joya retro o la pieza que faltaba en tu colección.
               </p>
               <div className="space-y-8">
                 {[
                   {
                     n: '01',
                     title: 'Algoritmo de Curaduría',
-                    desc: 'Nuestros expertos filtran miles de kits para asegurar que solo equipo auténtico de alta gama llegue a tus manos.',
+                    desc: 'Nuestros algoritmos filtran miles de kits para asegurar que nunca se repita un solo equipo.',
                   },
                   {
                     n: '02',
-                    title: 'Ciclo de Exclusividad',
-                    desc: 'Lanzamientos mensuales limitados. Una vez que se agotan, comienza la siguiente serie con clubes totalmente nuevos.',
+                    title: 'Para verdaderos aficionados',
+                    desc: 'Si amas el fútbol, sabes que cada jersey cuenta una historia. Esta puede ser la tuya.',
                   },
                 ].map((item) => (
                   <div key={item.n} className="flex gap-6">

@@ -2,18 +2,39 @@
 
 import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { useCart } from '@/context/CartContext'
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL']
 
-const BOX_LABELS: Record<string, { name: string; price: string; jerseys: number }> = {
-  debutante: { name: 'Debutante', price: '$1,199', jerseys: 1 },
-  doble: { name: 'Doble', price: '$2,199', jerseys: 2 },
-  'hat-trick': { name: 'Hat-Trick', price: '$3,299', jerseys: 3 },
-  'jersey-club': { name: 'Jersey Club', price: '$3,499', jerseys: 4 },
+const TIPOS = [
+  {
+    id: 'actual',
+    label: 'Actual',
+    desc: 'Temporada en curso',
+    icon: 'new_releases',
+  },
+  {
+    id: 'mundialista',
+    label: 'Mundialista',
+    desc: 'Edición selección',
+    icon: 'public',
+  },
+  {
+    id: 'retro',
+    label: 'Retro',
+    desc: 'Edición vintage',
+    icon: 'history',
+  },
+]
+
+const BOX_LABELS: Record<string, { name: string; price: string; priceNum: number; jerseys: number }> = {
+  debutante: { name: 'Debutante', price: '$899', priceNum: 89900, jerseys: 1 },
+  doble: { name: 'Doble', price: '$1,599', priceNum: 159900, jerseys: 2 },
+  'hat-trick': { name: 'Hat-Trick', price: '$2,599', priceNum: 259900, jerseys: 3 },
+  'jersey-club': { name: 'Jersey Club', price: '$3,399', priceNum: 339900, jerseys: 4 },
 }
 
 function ConfiguradorContent() {
@@ -23,10 +44,13 @@ function ConfiguradorContent() {
   const categoria = params.get('categoria') ?? 'Liga MX'
 
   const boxInfo = BOX_LABELS[boxId] ?? BOX_LABELS.debutante
+  const { addItem } = useCart()
 
   const [selectedSize, setSelectedSize] = useState('M')
+  const [selectedTipo, setSelectedTipo] = useState('actual')
   const [exclusiones, setExclusiones] = useState<string[]>([])
   const [inputEquipo, setInputEquipo] = useState('')
+  const [added, setAdded] = useState(false)
 
   function addExclusion() {
     const trimmed = inputEquipo.trim()
@@ -39,14 +63,20 @@ function ConfiguradorContent() {
     setExclusiones(exclusiones.filter((e) => e !== eq))
   }
 
-  function handleContinuar() {
-    const query = new URLSearchParams({
-      box: boxId,
+  function handleAgregarAlCarrito() {
+    addItem({
+      boxId,
+      boxName: `Mystery Box ${boxInfo.name}`,
       categoria,
       talla: selectedSize,
-      excl: exclusiones.join(','),
+      tipo: selectedTipo,
+      exclusiones,
+      price: boxInfo.priceNum,
+      priceDisplay: boxInfo.price,
+      jerseys: boxInfo.jerseys,
     })
-    router.push(`/checkout?${query.toString()}`)
+    setAdded(true)
+    setTimeout(() => router.push('/carrito'), 800)
   }
 
   return (
@@ -59,7 +89,7 @@ function ConfiguradorContent() {
         <section className="flex-grow space-y-16">
           <header>
             <p className="text-xs font-bold tracking-[0.2em] text-primary uppercase mb-2 font-label">
-              Personalización Técnica / Paso 01-02
+              Personalización / Paso 01-03
             </p>
             <h1 className="font-headline font-black text-4xl md:text-6xl text-on-surface tracking-tighter uppercase leading-none">
               Personaliza tu{' '}
@@ -94,10 +124,42 @@ function ConfiguradorContent() {
             </div>
           </div>
 
-          {/* Step 2: Exclusions */}
+          {/* Step 2: Tipo de Jersey */}
           <div className="space-y-6">
             <div className="flex items-center gap-4">
               <span className="font-headline font-black text-2xl text-primary/20">02</span>
+              <h2 className="font-headline font-bold text-xl uppercase tracking-tight">Tipo de Jersey</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {TIPOS.map((tipo) => (
+                <button
+                  key={tipo.id}
+                  onClick={() => setSelectedTipo(tipo.id)}
+                  className={`border-2 p-6 rounded-xl transition-all text-left flex flex-col gap-3 ${
+                    selectedTipo === tipo.id
+                      ? 'border-primary bg-emerald-50 shadow-md'
+                      : 'border-outline-variant hover:border-primary'
+                  }`}
+                >
+                  <span className={`material-symbols-outlined text-3xl ${selectedTipo === tipo.id ? 'text-primary' : 'text-zinc-400'}`}>
+                    {tipo.icon}
+                  </span>
+                  <div>
+                    <p className="font-headline font-black text-lg uppercase tracking-tight">{tipo.label}</p>
+                    <p className="text-xs text-on-surface-variant font-medium">{tipo.desc}</p>
+                  </div>
+                  {selectedTipo === tipo.id && (
+                    <span className="text-[10px] font-black uppercase tracking-widest text-primary">Seleccionado ✓</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Step 3: Exclusions */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              <span className="font-headline font-black text-2xl text-primary/20">03</span>
               <h2 className="font-headline font-bold text-xl uppercase tracking-tight">Equipos Excluidos</h2>
             </div>
             <div className="bg-surface-container p-8 rounded-xl space-y-6">
@@ -143,23 +205,6 @@ function ConfiguradorContent() {
               </div>
             </div>
           </div>
-
-          {/* Visual */}
-          <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-zinc-900">
-            <div className="absolute inset-0 kinetic-gradient opacity-60" />
-            <div className="absolute inset-0 flex flex-col justify-end p-12">
-              <div className="glass-panel p-6 max-w-sm rounded-lg border border-white/10">
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/70 mb-2">Performance HUD</p>
-                <div className="flex items-center gap-4 text-white">
-                  <span className="material-symbols-outlined">package_2</span>
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider">Authentic Gear Only</p>
-                    <p className="text-[10px] opacity-70">Sourced from official club distributors globally.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </section>
 
         {/* ── Summary Sidebar ───────────────────────────── */}
@@ -171,7 +216,8 @@ function ConfiguradorContent() {
                 {[
                   { label: 'Producto', value: `${boxInfo.name} (${boxInfo.jerseys} jersey${boxInfo.jerseys > 1 ? 's' : ''})` },
                   { label: 'Categoría', value: categoria },
-                  { label: 'Talla', value: `${selectedSize}` },
+                  { label: 'Talla', value: selectedSize },
+                  { label: 'Tipo', value: TIPOS.find((t) => t.id === selectedTipo)?.label ?? selectedTipo },
                 ].map((row) => (
                   <div key={row.label} className="flex justify-between items-center py-3 border-b border-surface-container">
                     <span className="text-xs font-bold uppercase tracking-wider text-secondary">{row.label}</span>
@@ -202,10 +248,25 @@ function ConfiguradorContent() {
                   <span className="text-4xl font-black font-headline text-primary">{boxInfo.price}</span>
                 </div>
                 <button
-                  onClick={handleContinuar}
-                  className="w-full kinetic-gradient text-on-primary py-5 rounded-lg font-black uppercase tracking-[0.2em] text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                  onClick={handleAgregarAlCarrito}
+                  disabled={added}
+                  className={`w-full py-5 rounded-lg font-black uppercase tracking-[0.2em] text-sm transition-all flex items-center justify-center gap-3 ${
+                    added
+                      ? 'bg-emerald-500 text-white scale-95'
+                      : 'kinetic-gradient text-on-primary shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95'
+                  }`}
                 >
-                  Continuar al Pago
+                  {added ? (
+                    <>
+                      <span className="material-symbols-outlined text-lg">check_circle</span>
+                      Agregado al Carrito
+                    </>
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined text-lg">shopping_bag</span>
+                      Añadir al Carrito
+                    </>
+                  )}
                 </button>
               </div>
 
