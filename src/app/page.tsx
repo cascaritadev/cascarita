@@ -109,35 +109,88 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            {/* Tier 1: Debutante */}
-            <div className="md:col-span-4 bg-surface-container-lowest p-8 flex flex-col justify-between group border border-zinc-100 hover:border-primary transition-colors">
-              <div>
-                <div className="flex justify-between items-start mb-12">
-                  <span className="text-xs font-bold tracking-widest text-on-surface-variant uppercase font-label">01 JERSEY / EL DEBUTANTE</span>
-                  <span className="bg-primary text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">KIT BASE</span>
+            {/* Tier 1: La Inicial */}
+            <div className="md:col-span-4 bg-surface-container-lowest flex flex-col justify-between group border border-zinc-100 hover:border-primary hover:shadow-2xl transition-all duration-300 overflow-hidden">
+
+              {/* Barra de acento superior */}
+              <div className="h-1 w-full bg-gradient-to-r from-primary to-emerald-400" />
+
+              <div className="p-8 flex flex-col flex-1">
+                {/* Header: etiqueta + urgencia */}
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <span className="text-[9px] font-bold tracking-[0.2em] text-on-surface-variant uppercase font-label block mb-2">SERIE 01 · 1 JERSEY</span>
+                    <span className="bg-primary text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest inline-block">Kit de Inicio</span>
+                  </div>
+                  <div className="flex flex-col items-end text-right">
+                    <span className="text-[9px] font-bold text-red-500 uppercase tracking-widest leading-none">Solo quedan</span>
+                    <span className="text-3xl font-black text-red-500 leading-none">35</span>
+                    <span className="text-[9px] text-red-400 uppercase font-bold leading-none">unidades</span>
+                  </div>
                 </div>
-                <div className="relative w-full aspect-square mb-8 overflow-hidden">
-                  <div className="absolute inset-0 translate-y-10">
+
+                {/* Imagen con badge de ahorro y efecto hover */}
+                <div className="relative w-full aspect-[3/4] mb-6 overflow-hidden bg-zinc-50">
+                  <div className="absolute inset-0 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                     <Image
                       src="/playera_1.png"
                       alt="Jersey La Inicial"
                       fill
-                      className="object-cover object-top"
+                      className="object-cover object-top scale-110 group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
+                  {/* Badge de ahorro */}
+                  <div className="absolute top-3 left-3 bg-emerald-500 text-white rounded-full w-14 h-14 flex flex-col items-center justify-center shadow-lg z-10">
+                    <span className="text-[9px] font-black leading-none uppercase">AHORRAS</span>
+                    <span className="text-sm font-black leading-tight">$251</span>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-black tracking-tight text-on-surface uppercase font-headline">La Inicial</h3>
-                  <p className="text-sm text-on-surface-variant leading-relaxed">La entrada perfecta al club. Un jersey auténtico de élite de cualquier liga del mundo.</p>
+
+                {/* Nombre + descripción */}
+                <div className="space-y-2 mb-5">
+                  <h3 className="text-3xl font-black tracking-tight text-on-surface uppercase font-headline leading-none">La Inicial</h3>
+                  <p className="text-sm text-on-surface-variant leading-relaxed">
+                    Tu primer jersey de élite. Cualquier liga del mundo la emoción está en no saber cuál.
+                  </p>
                 </div>
+
+                {/* Lista de beneficios */}
+                <ul className="space-y-2 mb-6">
+                  {[
+                    '1 jersey premium auténtico',
+                    'Empaque sellado sorpresa',
+                    'Tarjeta de autenticidad',
+                    'Envío gratis incluido',
+                  ].map((feat) => (
+                    <li key={feat} className="flex items-center gap-2 text-xs font-medium text-on-surface-variant">
+                      <span className="material-symbols-outlined text-emerald-500 text-base">check_circle</span>
+                      {feat}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="mt-12 flex items-end justify-between">
-                <div className="flex flex-col">
-                  <span className="text-xs text-zinc-400 line-through font-bold">$1,450.00 MXN</span>
-                  <span className="text-3xl font-black text-on-surface font-headline">$1,199.00</span>
+
+              {/* Precio + CTA fijo al fondo */}
+              <div className="px-8 pb-8">
+                <div className="flex items-end justify-between mb-4">
+                  <div>
+                    <span className="text-xs text-zinc-400 line-through font-bold block">$1,450.00 MXN</span>
+                    <span className="text-4xl font-black text-on-surface font-headline leading-none">
+                      $1,199<span className="text-lg">.00</span>
+                    </span>
+                    <span className="text-[10px] text-zinc-400 font-medium block mt-0.5">MXN · IVA incluido</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wide block">Ahorras</span>
+                    <span className="text-xl font-black text-emerald-600">$251</span>
+                  </div>
                 </div>
-                <Link href="/cajas?box=debutante" className="material-symbols-outlined p-4 bg-primary text-white hover:bg-emerald-800 transition-colors rounded-full">
-                  add_shopping_cart
+                <Link
+                  href="/cajas?box=debutante"
+                  className="flex items-center justify-between w-full bg-primary text-white px-6 py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-800 transition-colors group/btn"
+                >
+                  Quiero Este Kit
+                  <span className="material-symbols-outlined text-base group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
                 </Link>
               </div>
             </div>
@@ -167,7 +220,7 @@ export default function HomePage() {
                     03 Jerseys · Hat-Trick
                   </p>
                   <h3 className="text-5xl font-black tracking-tighter uppercase leading-[0.9] text-zinc-950 font-headline">
-                    Dominio<br />Total
+                    Hat-Trick<br />Total
                   </h3>
                 </div>
 
@@ -183,9 +236,9 @@ export default function HomePage() {
                 <div className="flex flex-col gap-2">
                   <Link
                     href="/cajas?box=hat-trick"
-                    className="flex items-center justify-between bg-zinc-950 text-white px-6 py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-950 transition-colors group/btn"
+                    className="flex items-center justify-between bg-primary text-white px-6 py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-800 transition-colors group/btn"
                   >
-                    Comprar ahora
+                    Quiero Este Kit
                     <span className="material-symbols-outlined text-base group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
                   </Link>
                   <p className="text-[10px] text-zinc-400 font-medium text-center uppercase tracking-widest">
@@ -202,8 +255,14 @@ export default function HomePage() {
                 <span className="bg-emerald-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">AHORRA 40%</span>
               </div>
               <div className="flex flex-col md:flex-row gap-8 items-center">
-                <div className="w-1/2 aspect-square bg-surface-container flex items-center justify-center">
-                  <span className="material-symbols-outlined text-[5rem] text-outline-variant">inventory_2</span>
+                <div className="relative w-1/2 aspect-square overflow-hidden">
+                  <Image
+                    src="/playera_2.png"
+                    alt="La Escuadra Completa"
+                    fill
+                    className="object-cover"
+                    style={{ objectPosition: 'center -40px' }}
+                  />
                 </div>
                 <div className="space-y-4">
                   <h3 className="text-3xl font-black text-on-surface uppercase tracking-tighter font-headline">La Escuadra Completa</h3>
@@ -214,9 +273,10 @@ export default function HomePage() {
                   </div>
                   <Link
                     href="/cajas?box=jersey-club"
-                    className="block w-full text-center bg-primary text-white py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-800 transition-colors"
+                    className="flex items-center justify-between w-full bg-primary text-white px-6 py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-800 transition-colors group/btn"
                   >
-                    Añadir al Carrito
+                    Quiero Este Kit
+                    <span className="material-symbols-outlined text-base group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
                   </Link>
                 </div>
               </div>
@@ -250,8 +310,13 @@ export default function HomePage() {
           <div className="max-w-screen-2xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             <div className="relative order-2 lg:order-1">
               <div className="absolute -top-12 -left-12 w-48 h-48 border-[20px] border-surface-container-highest -z-10" />
-              <div className="w-full aspect-[4/5] bg-surface-container flex items-center justify-center">
-                <span className="material-symbols-outlined text-[10rem] text-outline-variant">sports_soccer</span>
+              <div className="relative w-full aspect-[4/5] overflow-hidden">
+                <Image
+                  src="/caja.png"
+                  alt="Caja La Cascarita"
+                  fill
+                  className="object-cover"
+                />
               </div>
               <div className="absolute bottom-8 right-8 glass-card p-4 rounded-lg flex items-center gap-4 border border-white/40">
                 <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
