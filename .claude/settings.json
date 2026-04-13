@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/edwin/Downloads/stitch_mystery_jersey_website/stitch_mystery_jersey_website/**)",
+      "Bash(rm -f vite.config.ts index.html tsconfig.app.json tsconfig.node.json eslint.config.js)",
+      "Bash(rm -f src/App.tsx src/App.css src/main.tsx src/index.css)",
+      "Bash(rm -f src/assets/react.svg src/assets/vite.svg src/assets/hero.png)",
+      "Bash(npm install:*)",
+      "Bash(grep -E \"^\\(next$|next-auth|stripe|prisma|@prisma|bcryptjs\\)\")",
+      "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\(Object.keys\\(p.dependencies\\).join\\(' '\\)\\)\")",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/next/package.json'\\).version\\)\")",
+      "Bash(npx next:*)"
+    ]
+  }
+}
