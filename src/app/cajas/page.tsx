@@ -186,7 +186,7 @@ export default function CajasPage() {
         <div className="mt-20 flex flex-col md:flex-row justify-between items-center gap-8 border-t border-outline-variant pt-12">
           <div className="flex flex-wrap justify-center md:justify-start gap-12">
             {[
-              { icon: 'verified', title: '100% Original', sub: 'Authenticity Guaranteed' },
+              { icon: 'verified', title: 'Top Quality', sub: 'La mejor calidad' },
               { icon: 'local_shipping', title: 'Envío Express', sub: 'Gratis en Packs Premium' },
               { icon: 'history', title: 'Rare Drops', sub: 'Limited Edition Units' },
             ].map((badge) => (
