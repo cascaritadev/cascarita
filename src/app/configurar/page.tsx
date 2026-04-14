@@ -6,6 +6,7 @@ import AnnouncementBar from '@/components/AnnouncementBar'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { useCart } from '@/context/CartContext'
+import { getBoxPrice, formatMXN } from '@/lib/pricing'
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL']
 
@@ -30,11 +31,11 @@ const TIPOS = [
   },
 ]
 
-const BOX_LABELS: Record<string, { name: string; price: string; priceNum: number; jerseys: number }> = {
-  debutante: { name: 'Debutante', price: '$899', priceNum: 89900, jerseys: 1 },
-  doble: { name: 'Doble', price: '$1,599', priceNum: 159900, jerseys: 2 },
-  'hat-trick': { name: 'Hat-Trick', price: '$2,599', priceNum: 259900, jerseys: 3 },
-  'jersey-club': { name: 'Jersey Club', price: '$3,399', priceNum: 339900, jerseys: 4 },
+const BOX_LABELS: Record<string, { name: string; jerseys: number }> = {
+  debutante: { name: 'Debutante', jerseys: 1 },
+  doble: { name: 'Doble', jerseys: 2 },
+  'hat-trick': { name: 'Hat-Trick', jerseys: 3 },
+  'jersey-club': { name: 'Jersey Club', jerseys: 4 },
 }
 
 function ConfiguradorContent() {
@@ -63,6 +64,9 @@ function ConfiguradorContent() {
     setExclusiones(exclusiones.filter((e) => e !== eq))
   }
 
+  const computedPrice = getBoxPrice(boxId, selectedTipo)
+  const computedPriceDisplay = formatMXN(computedPrice)
+
   function handleAgregarAlCarrito() {
     addItem({
       boxId,
@@ -71,8 +75,8 @@ function ConfiguradorContent() {
       talla: selectedSize,
       tipo: selectedTipo,
       exclusiones,
-      price: boxInfo.priceNum,
-      priceDisplay: boxInfo.price,
+      price: computedPrice,
+      priceDisplay: computedPriceDisplay,
       jerseys: boxInfo.jerseys,
     })
     setAdded(true)
@@ -131,28 +135,36 @@ function ConfiguradorContent() {
               <h2 className="font-headline font-bold text-xl uppercase tracking-tight">Tipo de Jersey</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {TIPOS.map((tipo) => (
-                <button
-                  key={tipo.id}
-                  onClick={() => setSelectedTipo(tipo.id)}
-                  className={`border-2 p-6 rounded-xl transition-all text-left flex flex-col gap-3 ${
-                    selectedTipo === tipo.id
-                      ? 'border-primary bg-emerald-50 shadow-md'
-                      : 'border-outline-variant hover:border-primary'
-                  }`}
-                >
-                  <span className={`material-symbols-outlined text-3xl ${selectedTipo === tipo.id ? 'text-primary' : 'text-zinc-400'}`}>
-                    {tipo.icon}
-                  </span>
-                  <div>
-                    <p className="font-headline font-black text-lg uppercase tracking-tight">{tipo.label}</p>
-                    <p className="text-xs text-on-surface-variant font-medium">{tipo.desc}</p>
-                  </div>
-                  {selectedTipo === tipo.id && (
-                    <span className="text-[10px] font-black uppercase tracking-widest text-primary">Seleccionado ✓</span>
-                  )}
-                </button>
-              ))}
+              {TIPOS.map((tipo) => {
+                const isPremium = tipo.id === 'retro'
+                return (
+                  <button
+                    key={tipo.id}
+                    onClick={() => setSelectedTipo(tipo.id)}
+                    className={`border-2 p-6 rounded-xl transition-all text-left flex flex-col gap-3 relative ${
+                      selectedTipo === tipo.id
+                        ? 'border-primary bg-emerald-50 shadow-md'
+                        : 'border-outline-variant hover:border-primary'
+                    }`}
+                  >
+                    {isPremium && (
+                      <span className="absolute top-3 right-3 text-[9px] font-black uppercase tracking-widest bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                        $999/jersey
+                      </span>
+                    )}
+                    <span className={`material-symbols-outlined text-3xl ${selectedTipo === tipo.id ? 'text-primary' : 'text-zinc-400'}`}>
+                      {tipo.icon}
+                    </span>
+                    <div>
+                      <p className="font-headline font-black text-lg uppercase tracking-tight">{tipo.label}</p>
+                      <p className="text-xs text-on-surface-variant font-medium">{tipo.desc}</p>
+                    </div>
+                    {selectedTipo === tipo.id && (
+                      <span className="text-[10px] font-black uppercase tracking-widest text-primary">Seleccionado ✓</span>
+                    )}
+                  </button>
+                )
+              })}
             </div>
           </div>
 
@@ -245,7 +257,7 @@ function ConfiguradorContent() {
               <div className="pt-4">
                 <div className="flex justify-between items-end mb-6">
                   <span className="text-xs font-bold uppercase tracking-wider">Total</span>
-                  <span className="text-4xl font-black font-headline text-primary">{boxInfo.price}</span>
+                  <span className="text-4xl font-black font-headline text-primary">{computedPriceDisplay}</span>
                 </div>
                 <button
                   onClick={handleAgregarAlCarrito}

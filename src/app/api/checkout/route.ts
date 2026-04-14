@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
 import { getStripe, BOX_PRICES } from '@/lib/stripe'
+import { getBoxPrice } from '@/lib/pricing'
 import { authOptions } from '@/lib/auth'
 
 const CartItemSchema = z.object({
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
         quantity: 1,
         price_data: {
           currency: 'mxn',
-          unit_amount: boxInfo.price,
+          unit_amount: getBoxPrice(item.boxId, item.tipo),
           product_data: {
             name: boxInfo.name,
             description: [
