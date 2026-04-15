@@ -29,46 +29,65 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session
 
     const meta = session.metadata ?? {}
-    const shipping = session.shipping_details
 
-    // 1. Crear la orden en la base de datos
-    const order = await prisma.order.create({
-      data: {
-        email: session.customer_email ?? meta.userEmail ?? '',
-        userId: meta.userId || null,
-        stripeSessionId: session.id,
-        stripePaymentId: session.payment_intent as string ?? null,
-        status: 'PAID',
-        boxType: meta.boxId,
-        categoria: meta.categoria,
-        talla: meta.talla,
-        exclusiones: meta.exclusiones ? meta.exclusiones.split(',').filter(Boolean) : [],
-        amountTotal: session.amount_total ?? 0,
-        currency: session.currency ?? 'mxn',
-        shippingName: shipping?.name ?? null,
-        shippingLine1: shipping?.address?.line1 ?? null,
-        shippingLine2: shipping?.address?.line2 ?? null,
-        shippingCity: shipping?.address?.city ?? null,
-        shippingState: shipping?.address?.state ?? null,
-        shippingZip: shipping?.address?.postal_code ?? null,
-        shippingCountry: shipping?.address?.country ?? null,
-      },
+    // Parsear items del metadata
+    let firstItem = { boxId: meta.boxId ?? '', categoria: meta.categoria ?? '', talla: meta.talla ?? '', exclusiones: meta.exclusiones ?? '' }
+    if (meta.items) {
+      try {
+        const parsed = JSON.parse(meta.items)
+        if (Array.isArray(parsed) && parsed.length > 0) firstItem = parsed[0]
+      } catch { /* mantener fallback */ }
+    }
+
+    const email = session.customer_details?.email ?? session.customer_email ?? meta.userEmail ?? ''
+
+    // Dirección: shipping_details (versiones antiguas) o customer_details.address (API 2026-03+)
+    const rawSession = session as unknown as Record<string, unknown>
+    const collectedShipping = ((rawSession.collected_information as Record<string, unknown>)?.shipping_details ?? null) as { name?: string; address?: { line1?: string; line2?: string; city?: string; state?: string; postal_code?: string; country?: string } } | null
+    const shippingAddr = session.shipping_details?.address ?? collectedShipping?.address ?? session.customer_details?.address
+    const shippingName = session.shipping_details?.name ?? collectedShipping?.name ?? session.customer_details?.name ?? null
+
+    const orderData = {
+      email,
+      userId: meta.userId || null,
+      stripePaymentId: session.payment_intent as string ?? null,
+      status: 'PAID' as const,
+      boxType: firstItem.boxId,
+      categoria: firstItem.categoria ?? '',
+      talla: firstItem.talla ?? '',
+      exclusiones: firstItem.exclusiones ? firstItem.exclusiones.split(',').filter(Boolean) : [],
+      amountTotal: session.amount_total ?? 0,
+      currency: session.currency ?? 'mxn',
+      shippingName,
+      shippingLine1: shippingAddr?.line1 ?? null,
+      shippingLine2: shippingAddr?.line2 ?? null,
+      shippingCity: shippingAddr?.city ?? null,
+      shippingState: shippingAddr?.state ?? null,
+      shippingZip: shippingAddr?.postal_code ?? null,
+      shippingCountry: shippingAddr?.country ?? null,
+    }
+
+    // 1. Crear o actualizar la orden (idempotente ante reenvíos del webhook)
+    const order = await prisma.order.upsert({
+      where: { stripeSessionId: session.id },
+      create: { stripeSessionId: session.id, ...orderData },
+      update: orderData,
     })
 
-    // 2. Crear envío en SkyDropX (solo si tenemos dirección)
-    if (shipping?.address?.line1) {
+    // 2. Crear envío en SkyDropX (solo si tenemos dirección y aún no tiene guía)
+    if (shippingAddr?.line1 && !order.trackingNumber) {
       const shipResult = await createShipment({
-        boxType: meta.boxId,
+        boxType: firstItem.boxId,
         addressTo: {
-          name: shipping.name ?? '',
+          name: shippingName ?? '',
           phone: meta.phone ?? '',
-          email: session.customer_email ?? meta.userEmail ?? '',
-          line1: shipping.address.line1 ?? '',
-          line2: shipping.address.line2 ?? undefined,
-          city: shipping.address.city ?? '',
-          state: shipping.address.state ?? '',
-          zip: shipping.address.postal_code ?? '',
-          country: shipping.address.country ?? 'MX',
+          email,
+          line1: shippingAddr.line1 ?? '',
+          line2: shippingAddr.line2 ?? undefined,
+          city: shippingAddr.city ?? '',
+          state: shippingAddr.state ?? '',
+          zip: shippingAddr.postal_code ?? '',
+          country: shippingAddr.country ?? 'MX',
         },
       })
 

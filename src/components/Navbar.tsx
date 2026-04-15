@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
@@ -15,6 +16,7 @@ export default function Navbar() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const { totalItems } = useCart()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   function isActive(href: string) {
     if (href === '/cajas') {
@@ -47,7 +49,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
           {/* Cart icon with badge */}
           <Link href="/carrito" className="relative">
             <span className="material-symbols-outlined text-primary text-[28px]">shopping_bag</span>
@@ -58,9 +60,10 @@ export default function Navbar() {
             )}
           </Link>
 
+          {/* Desktop auth */}
           {session ? (
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-bold text-on-surface-variant hidden md:block">
+            <div className="hidden md:flex items-center gap-3">
+              <span className="text-xs font-bold text-on-surface-variant">
                 {session.user?.name?.split(' ')[0]}
               </span>
               <button
@@ -73,13 +76,65 @@ export default function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="kinetic-gradient text-white px-6 py-2.5 rounded-lg font-bold uppercase tracking-widest text-xs hover:opacity-90 transition-opacity"
+              className="hidden md:inline-flex kinetic-gradient text-white px-6 py-2.5 rounded-lg font-bold uppercase tracking-widest text-xs hover:opacity-90 transition-opacity"
             >
               Ingresar
             </Link>
           )}
+
+          {/* Hamburger button — mobile only */}
+          <button
+            className="md:hidden p-1 text-primary"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          >
+            <span className="material-symbols-outlined text-[30px]">
+              {menuOpen ? 'close' : 'menu'}
+            </span>
+          </button>
         </div>
       </div>
+
+      {/* Mobile dropdown */}
+      {menuOpen && (
+        <div className="md:hidden bg-white border-t border-zinc-100 px-6 py-4 flex flex-col gap-1 shadow-lg">
+          {links.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              onClick={() => setMenuOpen(false)}
+              className={`py-3 font-bold uppercase tracking-wider text-sm border-b border-zinc-50 transition-colors ${
+                isActive(link.href) ? 'text-primary' : 'text-zinc-600 hover:text-primary'
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div className="pt-3">
+            {session ? (
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-on-surface-variant">
+                  {session.user?.name?.split(' ')[0]}
+                </span>
+                <button
+                  onClick={() => { signOut({ callbackUrl: '/' }); setMenuOpen(false) }}
+                  className="kinetic-gradient text-white px-5 py-2 rounded-lg font-bold uppercase tracking-wider text-xs hover:opacity-90 transition-opacity"
+                >
+                  Salir
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMenuOpen(false)}
+                className="kinetic-gradient text-white w-full py-3 rounded-lg font-bold uppercase tracking-widest text-xs hover:opacity-90 transition-opacity text-center block"
+              >
+                Ingresar
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   )
 }

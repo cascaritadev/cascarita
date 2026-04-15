@@ -122,7 +122,7 @@ export async function createShipment(params: {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token token=${process.env.SKYDROPX_API_KEY}`,
+        Authorization: `Bearer ${process.env.SKYDROPX_BEARER_TOKEN}`,
       },
       body: JSON.stringify(payload),
     })
@@ -150,7 +150,7 @@ export async function createShipment(params: {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token token=${process.env.SKYDROPX_API_KEY}`,
+        Authorization: `Bearer ${process.env.SKYDROPX_BEARER_TOKEN}`,
       },
       body: JSON.stringify({ rate_id: cheapest.id }),
     })
@@ -174,7 +174,7 @@ export async function getTracking(shipmentId: string): Promise<TrackingResult> {
   try {
     const res = await fetch(`${SKYDROPX_BASE}/shipments/${shipmentId}/trackings`, {
       headers: {
-        Authorization: `Token token=${process.env.SKYDROPX_API_KEY}`,
+        Authorization: `Bearer ${process.env.SKYDROPX_BEARER_TOKEN}`,
       },
     })
 

@@ -13,10 +13,24 @@ export default function HomePage() {
       <main>
         {/* ── Hero Section ─────────────────────────────────────────── */}
         <section className="relative overflow-hidden bg-primary">
-          <div className="max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 min-h-[60vh]">
+
+          {/* Banner como fondo en mobile */}
+          <div className="absolute inset-0 lg:hidden">
+            <Image
+              src="/banner.png"
+              alt="Banner La Cascarita"
+              fill
+              className="object-cover"
+              style={{ objectPosition: '80% top' }}
+              priority
+            />
+            <div className="absolute inset-0 bg-primary/80" />
+          </div>
+
+          <div className="relative max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 min-h-[70vh] lg:min-h-[60vh]">
 
             {/* Left — copy */}
-            <div className="relative z-10 flex flex-col justify-center px-8 md:px-16 py-14 text-white">
+            <div className="relative z-10 flex flex-col justify-center px-8 md:px-16 py-16 text-white">
               <span className="inline-block text-xs font-bold tracking-[0.2em] text-emerald-400 mb-4 uppercase font-label">
                 SERIE KINETIC / 01
               </span>
@@ -42,10 +56,9 @@ export default function HomePage() {
                   Ver Unboxing
                 </button>
               </div>
-
             </div>
 
-            {/* Right — imagen */}
+            {/* Right — imagen (solo desktop) */}
             <div className="relative hidden lg:block">
               <Image
                 src="/banner.png"
@@ -58,18 +71,6 @@ export default function HomePage() {
               {/* degradado de fusión hacia la izquierda */}
               <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/10 to-transparent" />
             </div>
-          </div>
-
-          {/* Imagen en mobile — strip debajo del copy */}
-          <div className="relative lg:hidden w-full h-56 sm:h-72">
-            <Image
-              src="/banner.png"
-              alt="Banner La Cascarita"
-              fill
-              className="object-cover object-top"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/60 to-transparent" />
           </div>
         </section>
 
