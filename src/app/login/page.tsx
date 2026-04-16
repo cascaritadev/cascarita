@@ -28,7 +28,8 @@ export default function LoginPage() {
     if (res?.error) {
       setError('Correo o contraseña incorrectos.')
     } else {
-      router.push('/')
+      const params = new URLSearchParams(window.location.search)
+      router.push(params.get('callbackUrl') ?? '/')
       router.refresh()
     }
   }

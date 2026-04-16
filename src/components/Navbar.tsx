@@ -60,7 +60,7 @@ export default function Navbar() {
             )}
           </Link>
 
-          {/* Desktop auth */}
+          {/* Desktop — rastreo / admin salir */}
           {session ? (
             <div className="hidden md:flex items-center gap-3">
               <span className="text-xs font-bold text-on-surface-variant">
@@ -75,10 +75,11 @@ export default function Navbar() {
             </div>
           ) : (
             <Link
-              href="/login"
-              className="hidden md:inline-flex kinetic-gradient text-white px-6 py-2.5 rounded-lg font-bold uppercase tracking-widest text-xs hover:opacity-90 transition-opacity"
+              href="/rastreo"
+              className="hidden md:inline-flex items-center gap-1.5 kinetic-gradient text-white px-6 py-2.5 rounded-lg font-bold uppercase tracking-widest text-xs hover:opacity-90 transition-opacity"
             >
-              Ingresar
+              <span className="material-symbols-outlined text-sm">local_shipping</span>
+              Rastrear Pedido
             </Link>
           )}
 
@@ -125,11 +126,12 @@ export default function Navbar() {
               </div>
             ) : (
               <Link
-                href="/login"
+                href="/rastreo"
                 onClick={() => setMenuOpen(false)}
-                className="kinetic-gradient text-white w-full py-3 rounded-lg font-bold uppercase tracking-widest text-xs hover:opacity-90 transition-opacity text-center block"
+                className="kinetic-gradient text-white w-full py-3 rounded-lg font-bold uppercase tracking-widest text-xs hover:opacity-90 transition-opacity text-center flex items-center justify-center gap-2"
               >
-                Ingresar
+                <span className="material-symbols-outlined text-sm">local_shipping</span>
+                Rastrear Pedido
               </Link>
             )}
           </div>

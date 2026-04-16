@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import FooterActions from '@/components/FooterActions'
 
 export default function Footer() {
   return (
@@ -9,29 +10,23 @@ export default function Footer() {
             LA CASCARITA JERSEY CLUB
           </span>
           <p className="font-medium tracking-tight text-[10px] text-zinc-500 uppercase">
-            ©2024 LA CASCARITA / KINETIC PRECISION. DISEÑADO PARA LA CANCHA.
+            ©2025 LA CASCARITA / KINETIC PRECISION. DISEÑADO PARA LA CANCHA.
           </p>
         </div>
 
-        <div className="flex gap-10">
-          <Link href="#" className="font-medium tracking-tight text-xs uppercase text-zinc-500 hover:text-primary transition-colors hover:underline">
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-10">
+          <Link href="/terminos" className="font-medium tracking-tight text-xs uppercase text-zinc-500 hover:text-primary transition-colors hover:underline">
             Términos
           </Link>
-          <Link href="#" className="font-medium tracking-tight text-xs uppercase text-zinc-500 hover:text-primary transition-colors hover:underline">
+          <Link href="/privacidad" className="font-medium tracking-tight text-xs uppercase text-zinc-500 hover:text-primary transition-colors hover:underline">
             Privacidad
           </Link>
-          <Link href="#" className="font-medium tracking-tight text-xs uppercase text-zinc-500 hover:text-primary transition-colors hover:underline">
+          <Link href="/envios" className="font-medium tracking-tight text-xs uppercase text-zinc-500 hover:text-primary transition-colors hover:underline">
             Envíos
-          </Link>
-          <Link href="#" className="font-medium tracking-tight text-xs uppercase text-zinc-500 hover:text-primary transition-colors hover:underline">
-            Autenticidad
           </Link>
         </div>
 
-        <div className="flex gap-4">
-          <span className="material-symbols-outlined text-zinc-400 hover:text-primary cursor-pointer">language</span>
-          <span className="material-symbols-outlined text-zinc-400 hover:text-primary cursor-pointer">share</span>
-        </div>
+        <FooterActions />
       </div>
     </footer>
   )

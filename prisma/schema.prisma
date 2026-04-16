@@ -98,11 +98,13 @@ model Order {
   shippingZip     String?
   shippingCountry String?
 
-  // SkyDropX
+  // Envío
   skydropxShipmentId String?
   trackingNumber     String?
   trackingUrl        String?
   carrier            String?
+  shippedAt          DateTime? // se llena automáticamente al pasar a SHIPPED
+  estimatedDelivery  DateTime? // override manual desde el admin
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

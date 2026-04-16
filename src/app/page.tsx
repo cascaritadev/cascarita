@@ -97,8 +97,8 @@ export default function HomePage() {
         </section>
 
         {/* ── Product Tiers ─────────────────────────────────────────── */}
-        <section className="py-24 px-6 max-w-screen-2xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+        <section className="py-12 sm:py-24 px-4 sm:px-6 max-w-screen-2xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-8 sm:mb-16 gap-4 sm:gap-8">
             <div>
               <h2 className="text-5xl font-black tracking-tighter text-on-surface uppercase leading-none font-headline">
                 Elige Tu<br />Intensidad
@@ -197,10 +197,10 @@ export default function HomePage() {
             </div>
 
             {/* Tier 2: Destacado */}
-            <div className="md:col-span-8 overflow-hidden group grid grid-cols-1 md:grid-cols-[3fr_2fr] min-h-[480px]">
+            <div className="md:col-span-8 overflow-hidden group grid grid-cols-1 md:grid-cols-[3fr_2fr] md:min-h-[480px]">
 
               {/* Panel izquierdo — imagen sin padding, sangra hasta los bordes */}
-              <div className="relative bg-emerald-950 min-h-[420px]">
+              <div className="relative bg-emerald-950 aspect-[3/4] md:aspect-auto">
                 <Image
                   src="/playeras.png"
                   alt="Playeras La Cascarita"
@@ -215,7 +215,7 @@ export default function HomePage() {
               </div>
 
               {/* Panel derecho — copy sobre blanco */}
-              <div className="bg-white flex flex-col justify-center px-10 py-12 gap-7">
+              <div className="bg-white flex flex-col justify-center px-6 py-8 md:px-10 md:py-12 gap-5 md:gap-7">
                 <div>
                   <p className="text-[10px] font-bold tracking-[0.25em] text-zinc-400 uppercase mb-3">
                     03 Jerseys · Hat-Trick
@@ -250,13 +250,13 @@ export default function HomePage() {
             </div>
 
             {/* Tier 3: Jersey Club */}
-            <div className="md:col-span-6 bg-surface-container-low p-8 group border border-zinc-100">
-              <div className="flex justify-between items-start mb-8">
+            <div className="md:col-span-6 bg-surface-container-low group border border-zinc-100 overflow-hidden">
+              <div className="flex justify-between items-start p-6 md:p-8">
                 <span className="text-xs font-bold tracking-widest text-on-surface-variant uppercase font-label">04 JERSEYS / JERSEY CLUB PACK</span>
-                <span className="bg-emerald-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">AHORRA 40%</span>
+                <span className="bg-emerald-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shrink-0 ml-2">AHORRA 40%</span>
               </div>
-              <div className="flex flex-col md:flex-row gap-8 items-center">
-                <div className="relative w-1/2 aspect-square overflow-hidden">
+              <div className="flex flex-col md:flex-row md:gap-8 md:items-center md:px-8 md:pb-8">
+                <div className="relative w-full aspect-[3/4] md:w-1/2 md:aspect-square overflow-hidden">
                   <Image
                     src="/playera_2.png"
                     alt="La Escuadra Completa"
@@ -265,7 +265,7 @@ export default function HomePage() {
                     style={{ objectPosition: 'center -40px' }}
                   />
                 </div>
-                <div className="space-y-4">
+                <div className="space-y-4 p-6 md:p-0">
                   <h3 className="text-3xl font-black text-on-surface uppercase tracking-tighter font-headline">La Escuadra Completa</h3>
                   <p className="text-sm text-on-surface-variant">La experiencia definitiva. 4 jerseys auténticos.</p>
                   <div className="flex flex-col">
