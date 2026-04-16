@@ -61,15 +61,9 @@ export default function AdminPage() {
   const [saving, setSaving] = useState(false)
   const [filter, setFilter] = useState('ALL')
 
-  const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL
-
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.replace('/login?callbackUrl=/admin')
-      return
-    }
-    if (status === 'authenticated' && session?.user?.email !== adminEmail) {
-      router.replace('/')
       return
     }
     if (status === 'authenticated') fetchOrders()
