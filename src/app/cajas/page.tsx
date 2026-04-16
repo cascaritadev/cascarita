@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
@@ -110,8 +111,19 @@ export default function CajasPage() {
               )}
 
               {/* Image placeholder */}
-              <div className={`relative h-48 overflow-hidden rounded-t-xl flex items-center justify-center ${box.featured ? 'bg-primary' : 'bg-surface-container'}`}>
-                <span className="material-symbols-outlined text-[5rem] text-white/20">inventory_2</span>
+              <div className={`relative h-72 overflow-hidden rounded-t-xl flex items-center justify-center bg-surface-container`}>
+                <Image
+                  src="/individual_bn.png"
+                  alt={box.name}
+                  fill
+                  className="object-contain transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+                />
+                <Image
+                  src="/individual.png"
+                  alt={box.name}
+                  fill
+                  className="object-contain transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                />
                 <div className="absolute top-3 left-3">
                   <span className={`text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-full ${box.featured ? 'bg-primary text-white' : 'bg-white/90 backdrop-blur-sm text-primary border border-primary/10'}`}>
                     Envío Gratis
@@ -127,7 +139,7 @@ export default function CajasPage() {
               </div>
 
               {/* Content */}
-              <div className={`p-6 flex flex-col flex-grow ${box.featured ? 'bg-emerald-50/30' : ''}`}>
+              <div className={`p-6 flex flex-col flex-grow`}>
                 <div className="mb-4">
                   <div className="flex items-center gap-1 mb-1">
                     <h3 className="font-headline text-2xl font-black uppercase tracking-tighter">{box.name}</h3>
