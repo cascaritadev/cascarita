@@ -70,7 +70,11 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.png',
+    icon: [
+      { url: '/favicon.png', type: 'image/png', sizes: '512x512' },
+    ],
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
   },
   alternates: {
     canonical: 'https://cascaritajc.com',
