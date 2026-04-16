@@ -4,9 +4,45 @@ import AnnouncementBar from '@/components/AnnouncementBar'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'La Cascarita Jersey Club',
+  url: 'https://cascaritajc.com',
+  logo: 'https://cascaritajc.com/logo.png',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: '+52-55-1624-6461',
+    contactType: 'customer service',
+    areaServed: 'MX',
+    availableLanguage: 'Spanish',
+  },
+  sameAs: [],
+}
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'La Cascarita Jersey Club',
+  url: 'https://cascaritajc.com',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://cascaritajc.com/cajas',
+    'query-input': 'required name=search_term_string',
+  },
+}
+
 export default function HomePage() {
   return (
     <div className="bg-surface text-on-surface">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
       <AnnouncementBar />
       <Navbar />
 
@@ -52,7 +88,7 @@ export default function HomePage() {
                   Empieza tu Colección
                 </Link>
                 <button className="bg-transparent border-2 border-white/40 text-white px-8 py-4 rounded-lg font-bold uppercase tracking-widest text-sm hover:bg-white/10 transition-colors flex items-center gap-2">
-                  <span className="material-symbols-outlined">play_circle</span>
+                  <span className="material-symbols-outlined" aria-hidden="true">play_circle</span>
                   Ver Unboxing
                 </button>
               </div>
