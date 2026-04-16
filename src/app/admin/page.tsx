@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 type Order = {
   id: string
@@ -123,8 +124,17 @@ export default function AdminPage() {
           <h1 className="font-headline font-black text-2xl uppercase tracking-tighter">Admin · La Cascarita</h1>
           <p className="text-emerald-300 text-xs font-bold uppercase tracking-widest mt-0.5">Panel de pedidos</p>
         </div>
-        <div className="text-right text-xs text-emerald-300 font-bold uppercase">
-          {orders.length} pedidos en total
+        <div className="flex items-center gap-3">
+          <Link
+            href="/admin/dashboard"
+            className="px-4 py-2 text-xs font-black uppercase tracking-wider border border-emerald-300 text-emerald-300 hover:bg-emerald-300 hover:text-primary transition-colors flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-sm">analytics</span>
+            Dashboard
+          </Link>
+          <span className="text-xs text-emerald-300 font-bold uppercase">
+            {orders.length} pedidos en total
+          </span>
         </div>
       </div>
 
