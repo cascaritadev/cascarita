@@ -27,6 +27,10 @@ export async function GET() {
       talla: true,
       exclusiones: true,
       amountTotal: true,
+      amountDiscount: true,
+      promoCode: true,
+      promoPerson: true,
+      promoType: true,
       shippingCity: true,
       shippingState: true,
       shippedAt: true,
@@ -92,6 +96,51 @@ export async function GET() {
   ).slice(0, 10)
   const exclusionRanking = ranking(paidOrders.flatMap((o) => o.exclusiones)).slice(0, 10)
 
+  // Promo code stats
+  const ordersWithPromo = paidOrders.filter((o) => o.promoCode)
+  const totalDiscountGiven = ordersWithPromo.reduce((s, o) => s + (o.amountDiscount ?? 0), 0)
+
+  const promoByPerson = new Map<string, {
+    person: string
+    orders: number
+    revenue: number
+    discount: number
+    codes: Set<string>
+    vipUses: number
+    influencerUses: number
+  }>()
+  for (const o of ordersWithPromo) {
+    const key = o.promoPerson ?? 'Sin asignar'
+    const entry = promoByPerson.get(key) ?? {
+      person: key,
+      orders: 0,
+      revenue: 0,
+      discount: 0,
+      codes: new Set<string>(),
+      vipUses: 0,
+      influencerUses: 0,
+    }
+    entry.orders += 1
+    entry.revenue += o.amountTotal
+    entry.discount += o.amountDiscount ?? 0
+    if (o.promoCode) entry.codes.add(o.promoCode)
+    if (o.promoType === 'vip') entry.vipUses += 1
+    if (o.promoType === 'influencer') entry.influencerUses += 1
+    promoByPerson.set(key, entry)
+  }
+
+  const promoRanking = [...promoByPerson.values()]
+    .map((e) => ({
+      person: e.person,
+      orders: e.orders,
+      revenue: e.revenue,
+      discount: e.discount,
+      codes: [...e.codes],
+      vipUses: e.vipUses,
+      influencerUses: e.influencerUses,
+    }))
+    .sort((a, b) => b.revenue - a.revenue)
+
   // Sales last 30 days (by day)
   const days = 30
   const salesByDay: { date: string; revenue: number; orders: number }[] = []
@@ -153,6 +202,17 @@ export async function GET() {
   if (avgShipDays > 0) {
     insights.push(`Tiempo promedio para enviar un pedido: ${avgShipDays.toFixed(1)} día(s).`)
   }
+  if (promoRanking[0]) {
+    const top = promoRanking[0]
+    insights.push(
+      `El influencer con más ventas es "${top.person}" con ${top.orders} pedido(s) — generó ${(top.revenue / 100).toLocaleString('es-MX')} MXN de ingresos.`
+    )
+  }
+  if (totalDiscountGiven > 0) {
+    insights.push(
+      `Se han otorgado $${(totalDiscountGiven / 100).toLocaleString('es-MX')} MXN en descuentos por códigos promocionales (${ordersWithPromo.length} pedidos).`
+    )
+  }
 
   return NextResponse.json({
     kpis: {
@@ -179,6 +239,11 @@ export async function GET() {
       cities: cityRanking,
       states: stateRanking,
       exclusions: exclusionRanking,
+    },
+    promos: {
+      totalOrders: ordersWithPromo.length,
+      totalDiscount: totalDiscountGiven,
+      byPerson: promoRanking,
     },
     salesByDay,
     insights,

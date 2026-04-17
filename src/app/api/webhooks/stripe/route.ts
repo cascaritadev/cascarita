@@ -41,6 +41,30 @@ export async function POST(req: NextRequest) {
 
     const email = session.customer_details?.email ?? session.customer_email ?? meta.userEmail ?? ''
 
+    // Promo code — preferir metadata (si fue pasado por nuestra API) y caer en la sesión expandida
+    let promoCode = meta.promoCode || null
+    let promoPerson = meta.promoPerson || null
+    let promoType = meta.promoType || null
+    const amountDiscount = session.total_details?.amount_discount ?? 0
+    const amountSubtotal = session.amount_subtotal ?? null
+
+    if (!promoCode && amountDiscount > 0) {
+      try {
+        const full = await getStripe().checkout.sessions.retrieve(session.id, {
+          expand: ['total_details.breakdown.discounts.discount.promotion_code'],
+        })
+        const discount = full.total_details?.breakdown?.discounts?.[0]?.discount
+        const promo = discount?.promotion_code
+        if (promo && typeof promo !== 'string') {
+          promoCode = promo.code
+          promoPerson = (promo.metadata?.person as string) ?? null
+          promoType = (promo.metadata?.type as string) ?? null
+        }
+      } catch (err) {
+        console.warn('[WEBHOOK] No se pudo expandir promo:', err)
+      }
+    }
+
     // Dirección: shipping_details (versiones antiguas) o customer_details.address (API 2026-03+)
     const rawSession = session as unknown as Record<string, unknown>
     const collectedShipping = ((rawSession.collected_information as Record<string, unknown>)?.shipping_details ?? null) as { name?: string; address?: { line1?: string; line2?: string; city?: string; state?: string; postal_code?: string; country?: string } } | null
@@ -56,8 +80,13 @@ export async function POST(req: NextRequest) {
       categoria: firstItem.categoria ?? '',
       talla: firstItem.talla ?? '',
       exclusiones: firstItem.exclusiones ? firstItem.exclusiones.split(',').filter(Boolean) : [],
+      amountSubtotal,
+      amountDiscount: amountDiscount || null,
       amountTotal: session.amount_total ?? 0,
       currency: session.currency ?? 'mxn',
+      promoCode,
+      promoPerson,
+      promoType,
       shippingName,
       shippingLine1: shippingAddr?.line1 ?? null,
       shippingLine2: shippingAddr?.line2 ?? null,

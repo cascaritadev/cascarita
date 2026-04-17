@@ -15,6 +15,7 @@ const CartItemSchema = z.object({
 
 const CheckoutSchema = z.object({
   items: z.array(CartItemSchema).min(1).max(10),
+  promoCode: z.string().trim().min(1).max(40).optional(),
 })
 
 export async function POST(req: NextRequest) {
@@ -29,9 +30,33 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const { items } = parsed.data
+    const { items, promoCode } = parsed.data
     const session = await getServerSession(authOptions)
     const baseUrl = process.env.NEXTAUTH_URL ?? 'http://localhost:3000'
+
+    // Resolver promotion code (si lo hay) a su ID de Stripe
+    let discounts: { promotion_code: string }[] | undefined
+    let promoMetadata: { code?: string; person?: string; type?: string } = {}
+    if (promoCode) {
+      const list = await getStripe().promotionCodes.list({
+        code: promoCode.toUpperCase(),
+        active: true,
+        limit: 1,
+      })
+      const promo = list.data[0]
+      if (!promo) {
+        return NextResponse.json({ error: 'Código promocional inválido.' }, { status: 400 })
+      }
+      if (promo.max_redemptions && promo.times_redeemed >= promo.max_redemptions) {
+        return NextResponse.json({ error: 'Este código ya fue utilizado.' }, { status: 400 })
+      }
+      discounts = [{ promotion_code: promo.id }]
+      promoMetadata = {
+        code: promo.code,
+        person: (promo.metadata?.person as string) ?? '',
+        type: (promo.metadata?.type as string) ?? '',
+      }
+    }
 
     // Build Stripe line_items from cart
     const line_items = items.map((item) => {
@@ -71,12 +96,16 @@ export async function POST(req: NextRequest) {
           exclusiones: (i.exclusiones ?? []).join(','),
         }))
       ),
+      promoCode: promoMetadata.code ?? '',
+      promoPerson: promoMetadata.person ?? '',
+      promoType: promoMetadata.type ?? '',
     }
 
     const checkoutSession = await getStripe().checkout.sessions.create({
       mode: 'payment',
       currency: 'mxn',
       line_items,
+      ...(discounts ? { discounts } : { allow_promotion_codes: true }),
       shipping_address_collection: {
         allowed_countries: ['MX'],
       },

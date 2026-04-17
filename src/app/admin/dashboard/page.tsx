@@ -27,6 +27,19 @@ type Stats = {
     states: { key: string; count: number }[]
     exclusions: { key: string; count: number }[]
   }
+  promos: {
+    totalOrders: number
+    totalDiscount: number
+    byPerson: {
+      person: string
+      orders: number
+      revenue: number
+      discount: number
+      codes: string[]
+      vipUses: number
+      influencerUses: number
+    }[]
+  }
   salesByDay: { date: string; revenue: number; orders: number }[]
   insights: string[]
 }
@@ -89,7 +102,7 @@ export default function DashboardPage() {
     )
   }
 
-  const { kpis, statusCounts, conversion, rankings, salesByDay, insights } = stats
+  const { kpis, statusCounts, conversion, rankings, promos, salesByDay, insights } = stats
   const maxRevenueDay = Math.max(...salesByDay.map((d) => d.revenue), 1)
   const maxStatusCount = Math.max(...Object.values(statusCounts), 1)
   const conversionRateShipped = conversion.paid > 0 ? Math.round((conversion.shipped / conversion.paid) * 100) : 0
@@ -314,6 +327,83 @@ export default function DashboardPage() {
             danger
           />
         </div>
+
+        {/* CÓDIGOS PROMOCIONALES */}
+        <section className="bg-white border border-zinc-100 p-6">
+          <div className="flex items-center gap-2 mb-5">
+            <span className="material-symbols-outlined text-emerald-500">local_offer</span>
+            <h2 className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Códigos promocionales por influencer</h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            <KpiCard
+              label="Pedidos con código"
+              value={promos.totalOrders.toString()}
+              hint={`de ${kpis.paidOrders} pagados`}
+              icon="redeem"
+            />
+            <KpiCard
+              label="Descuento otorgado"
+              value={formatMoney(promos.totalDiscount)}
+              hint="Total rebajado"
+              icon="percent"
+              hintColor="text-red-500"
+            />
+            <KpiCard
+              label="Ingresos c/ código"
+              value={formatMoney(promos.byPerson.reduce((s, p) => s + p.revenue, 0))}
+              hint="Atribuidos a influencers"
+              icon="trending_up"
+            />
+            <KpiCard
+              label="Influencers activos"
+              value={promos.byPerson.length.toString()}
+              hint="Con al menos 1 venta"
+              icon="group"
+            />
+          </div>
+
+          {promos.byPerson.length === 0 ? (
+            <p className="text-zinc-400 text-xs italic">Aún nadie ha usado un código promocional.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b border-zinc-200 text-left">
+                    <th className="py-2 pr-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Persona</th>
+                    <th className="py-2 pr-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Códigos</th>
+                    <th className="py-2 pr-3 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-right">Pedidos</th>
+                    <th className="py-2 pr-3 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-right">VIP</th>
+                    <th className="py-2 pr-3 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-right">Influencer</th>
+                    <th className="py-2 pr-3 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-right">Descuento</th>
+                    <th className="py-2 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-right">Ingresos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {promos.byPerson.map((p) => (
+                    <tr key={p.person} className="border-b border-zinc-50 hover:bg-zinc-50">
+                      <td className="py-3 pr-3 font-black text-zinc-800 uppercase tracking-wide">{p.person}</td>
+                      <td className="py-3 pr-3">
+                        <div className="flex flex-wrap gap-1">
+                          {p.codes.map((c) => (
+                            <span key={c} className="bg-emerald-50 text-emerald-700 font-bold text-[10px] px-2 py-0.5 rounded">
+                              {c}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="py-3 pr-3 font-bold text-zinc-700 text-right">{p.orders}</td>
+                      <td className="py-3 pr-3 text-zinc-500 text-right">{p.vipUses}</td>
+                      <td className="py-3 pr-3 text-zinc-500 text-right">{p.influencerUses}</td>
+                      <td className="py-3 pr-3 text-red-500 font-bold text-right">−{formatMoney(p.discount)}</td>
+                      <td className="py-3 font-black text-primary text-right">{formatMoney(p.revenue)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
       </div>
     </div>
   )

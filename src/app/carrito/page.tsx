@@ -7,13 +7,77 @@ import Footer from '@/components/Footer'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import { useCart } from '@/context/CartContext'
 
+type AppliedPromo = {
+  code: string
+  amountOff: number | null
+  percentOff: number | null
+  person: string | null
+  type: string | null
+}
+
+function formatMXN(cents: number) {
+  return `$${(cents / 100).toLocaleString('es-MX', { minimumFractionDigits: 2 })}`
+}
+
 export default function CarritoPage() {
   const { items, removeItem, clearCart } = useCart()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const total = items.reduce((sum, item) => sum + item.price, 0)
-  const totalDisplay = `$${(total / 100).toLocaleString('es-MX', { minimumFractionDigits: 2 })}`
+  const [promoInput, setPromoInput] = useState('')
+  const [promoLoading, setPromoLoading] = useState(false)
+  const [promoError, setPromoError] = useState('')
+  const [promo, setPromo] = useState<AppliedPromo | null>(null)
+
+  const subtotal = items.reduce((sum, item) => sum + item.price, 0)
+  const discount = promo
+    ? promo.amountOff
+      ? Math.min(promo.amountOff, subtotal)
+      : promo.percentOff
+      ? Math.round((subtotal * promo.percentOff) / 100)
+      : 0
+    : 0
+  const total = Math.max(subtotal - discount, 0)
+  const totalDisplay = formatMXN(total)
+
+  async function handleApplyPromo() {
+    const code = promoInput.trim().toUpperCase()
+    if (!code) return
+    setPromoLoading(true)
+    setPromoError('')
+
+    try {
+      const res = await fetch('/api/promo/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.valid) {
+        setPromoError(data.error || 'Código inválido.')
+        setPromo(null)
+      } else {
+        setPromo({
+          code: data.code,
+          amountOff: data.amountOff ?? null,
+          percentOff: data.percentOff ?? null,
+          person: data.person ?? null,
+          type: data.type ?? null,
+        })
+        setPromoInput(data.code)
+      }
+    } catch {
+      setPromoError('Error de conexión.')
+    } finally {
+      setPromoLoading(false)
+    }
+  }
+
+  function handleRemovePromo() {
+    setPromo(null)
+    setPromoInput('')
+    setPromoError('')
+  }
 
   async function handleCheckout() {
     if (items.length === 0) return
@@ -32,6 +96,7 @@ export default function CarritoPage() {
             tipo: item.tipo,
             exclusiones: item.exclusiones,
           })),
+          ...(promo ? { promoCode: promo.code } : {}),
         }),
       })
 
@@ -177,9 +242,74 @@ export default function CarritoPage() {
                     <span className="text-primary font-black uppercase text-[11px] tracking-wider">GRATIS</span>
                   </div>
 
+                  {/* ── Promo code ── */}
+                  <div className="pt-4 border-t border-outline-variant/30 space-y-2">
+                    <label className="text-outline uppercase tracking-wider text-[11px] font-bold block">
+                      Código promocional
+                    </label>
+                    {promo ? (
+                      <div className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
+                        <div className="flex items-center gap-2">
+                          <span className="material-symbols-outlined text-emerald-600 text-base">check_circle</span>
+                          <div className="flex flex-col leading-tight">
+                            <span className="font-bold text-xs text-emerald-800">{promo.code}</span>
+                            <span className="text-[10px] text-emerald-700">
+                              {promo.amountOff
+                                ? `${formatMXN(promo.amountOff)} de descuento`
+                                : `${promo.percentOff}% de descuento`}
+                            </span>
+                          </div>
+                        </div>
+                        <button
+                          onClick={handleRemovePromo}
+                          className="text-[10px] font-bold uppercase text-emerald-700 hover:text-red-600 tracking-widest"
+                        >
+                          Quitar
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={promoInput}
+                          onChange={(e) => {
+                            setPromoInput(e.target.value.toUpperCase())
+                            setPromoError('')
+                          }}
+                          onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
+                          placeholder=""
+                          className="flex-1 bg-white border border-zinc-200 rounded-lg px-3 py-2 text-sm font-bold uppercase tracking-wider focus:outline-none focus:border-primary"
+                          maxLength={40}
+                        />
+                        <button
+                          onClick={handleApplyPromo}
+                          disabled={promoLoading || !promoInput.trim()}
+                          className="bg-primary text-white px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-widest hover:opacity-90 transition disabled:opacity-40"
+                        >
+                          {promoLoading ? '...' : 'Aplicar'}
+                        </button>
+                      </div>
+                    )}
+                    {promoError && (
+                      <p className="text-[11px] text-red-600 font-bold">{promoError}</p>
+                    )}
+                  </div>
+
+                  {discount > 0 && (
+                    <div className="flex justify-between items-center text-sm pt-2">
+                      <span className="text-emerald-700 uppercase tracking-wider text-[11px] font-bold">Descuento</span>
+                      <span className="text-emerald-700 font-bold">−{formatMXN(discount)}</span>
+                    </div>
+                  )}
+
                   <div className="flex justify-between items-center pt-6 border-t border-on-surface/10">
                     <span className="font-headline font-black uppercase text-lg tracking-tighter">Total</span>
                     <div className="text-right">
+                      {discount > 0 && (
+                        <span className="block text-xs text-outline line-through font-bold">
+                          {formatMXN(subtotal)}
+                        </span>
+                      )}
                       <span className="block font-headline font-black text-2xl tracking-tighter text-primary">
                         {totalDisplay}
                       </span>
