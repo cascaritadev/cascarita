@@ -13,22 +13,22 @@ export function getStripe(): Stripe {
 export const BOX_PRICES: Record<string, { name: string; price: number; description: string }> = {
   debutante: {
     name: 'Mystery Box Debutante',
-    price: 89900, // centavos MXN = $899.00 MXN
+    price: 79900, // centavos MXN = $799.00 MXN
     description: '1 Jersey auténtico de élite · Envío gratis',
   },
   doble: {
     name: 'Mystery Box Doble',
-    price: 159900, // $1,599.00 MXN
+    price: 158000, // $1,580.00 MXN
     description: '2 Jerseys auténticos · Envío gratis',
   },
   'hat-trick': {
     name: 'Mystery Box Hat-Trick',
-    price: 259900, // $2,599.00 MXN
+    price: 224900, // $2,249.00 MXN
     description: '3 Jerseys auténticos · Envío gratis',
   },
   'jersey-club': {
     name: 'Mystery Box Jersey Club',
-    price: 339900, // $3,399.00 MXN
+    price: 269900, // $2,699.00 MXN
     description: '4 Jerseys auténticos · Envío gratis · Mejor valor',
   },
 }

@@ -2,22 +2,22 @@
 
 export const PRICES_BY_TIPO: Record<string, Record<string, number>> = {
   actual: {
-    debutante: 89900,    // $899
-    doble: 159900,       // $1,599
-    'hat-trick': 259900, // $2,599
-    'jersey-club': 339900, // $3,399
+    debutante: 79900,    // $799
+    doble: 158000,       // $1,580
+    'hat-trick': 224900, // $2,249
+    'jersey-club': 269900, // $2,699
   },
   mundialista: {
-    debutante: 89900,    // $899
-    doble: 159900,       // $1,599
-    'hat-trick': 259900, // $2,599
-    'jersey-club': 339900, // $3,399
+    debutante: 79900,    // $799
+    doble: 158000,       // $1,580
+    'hat-trick': 224900, // $2,249
+    'jersey-club': 269900, // $2,699
   },
   retro: {
-    debutante: 99900,    // $999
-    doble: 199800,       // $1,998
-    'hat-trick': 299700, // $2,997
-    'jersey-club': 399600, // $3,996
+    debutante: 79900,    // $799
+    doble: 158000,       // $1,580
+    'hat-trick': 224900, // $2,249
+    'jersey-club': 269900, // $2,699
   },
 }
 

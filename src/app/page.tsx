@@ -160,9 +160,8 @@ export default function HomePage() {
                     <span className="bg-primary text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest inline-block">Kit de Inicio</span>
                   </div>
                   <div className="flex flex-col items-end text-right">
-                    <span className="text-[9px] font-bold text-red-500 uppercase tracking-widest leading-none">Solo quedan</span>
-                    <span className="text-3xl font-black text-red-500 leading-none">35</span>
-                    <span className="text-[9px] text-red-400 uppercase font-bold leading-none">unidades</span>
+                    <span className="text-[9px] font-bold text-red-500 uppercase tracking-widest leading-none">Piezas</span>
+                    <span className="text-2xl font-black text-red-500 leading-none mt-1">Limitadas</span>
                   </div>
                 </div>
 
@@ -179,7 +178,7 @@ export default function HomePage() {
                   {/* Badge de ahorro */}
                   <div className="absolute top-3 left-3 bg-emerald-500 text-white rounded-full w-14 h-14 flex flex-col items-center justify-center shadow-lg z-10">
                     <span className="text-[9px] font-black leading-none uppercase">AHORRAS</span>
-                    <span className="text-sm font-black leading-tight">$300</span>
+                    <span className="text-sm font-black leading-tight">$700</span>
                   </div>
                 </div>
 
@@ -211,15 +210,15 @@ export default function HomePage() {
               <div className="px-8 pb-8">
                 <div className="flex items-end justify-between mb-4">
                   <div>
-                    <span className="text-xs text-zinc-400 line-through font-bold block">$1,199.00 MXN</span>
+                    <span className="text-xs text-zinc-400 line-through font-bold block">$1,499.00 MXN</span>
                     <span className="text-4xl font-black text-on-surface font-headline leading-none">
-                      $899<span className="text-lg">.00</span>
+                      $799<span className="text-lg">.00</span>
                     </span>
                     <span className="text-[10px] text-zinc-400 font-medium block mt-0.5">MXN · IVA incluido</span>
                   </div>
                   <div className="text-right">
                     <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wide block">Ahorras</span>
-                    <span className="text-xl font-black text-emerald-600">$300</span>
+                    <span className="text-xl font-black text-emerald-600">$700</span>
                   </div>
                 </div>
                 <Link
@@ -266,8 +265,8 @@ export default function HomePage() {
                 </p>
 
                 <div className="flex items-baseline gap-3">
-                  <span className="text-4xl font-black text-zinc-950 font-headline">$2,599</span>
-                  <span className="text-sm text-zinc-400 line-through font-bold">$3,599 MXN</span>
+                  <span className="text-4xl font-black text-zinc-950 font-headline">$2,249</span>
+                  <span className="text-sm text-zinc-400 line-through font-bold">$3,799 MXN</span>
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -289,7 +288,7 @@ export default function HomePage() {
             <div className="md:col-span-6 bg-surface-container-low group border border-zinc-100 overflow-hidden">
               <div className="flex justify-between items-start p-6 md:p-8">
                 <span className="text-xs font-bold tracking-widest text-on-surface-variant uppercase font-label">04 JERSEYS / JERSEY CLUB PACK</span>
-                <span className="bg-emerald-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shrink-0 ml-2">AHORRA 40%</span>
+                <span className="bg-emerald-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shrink-0 ml-2">AHORRA 46%</span>
               </div>
               <div className="flex flex-col md:flex-row md:gap-8 md:items-center md:px-8 md:pb-8">
                 <div className="relative w-full aspect-[3/4] md:w-1/2 md:aspect-square overflow-hidden">
@@ -305,8 +304,8 @@ export default function HomePage() {
                   <h3 className="text-3xl font-black text-on-surface uppercase tracking-tighter font-headline">La Escuadra Completa</h3>
                   <p className="text-sm text-on-surface-variant">La experiencia definitiva. 4 jerseys auténticos.</p>
                   <div className="flex flex-col">
-                    <span className="text-sm text-zinc-400 line-through font-bold">$4,799.00 MXN</span>
-                    <span className="text-4xl font-black text-primary font-headline">$3,399.00</span>
+                    <span className="text-sm text-zinc-400 line-through font-bold">$4,999.00 MXN</span>
+                    <span className="text-4xl font-black text-primary font-headline">$2,699.00</span>
                   </div>
                   <Link
                     href="/configurar?box=jersey-club&categoria=Mix%20(Recomendado)"

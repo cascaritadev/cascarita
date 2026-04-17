@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Mystery Box de Jerseys',
   description:
-    'Elige tu Mystery Box: Debutante ($899), Doble ($1,599), Hat-Trick ($2,499) o Jersey Club ($2,999). Jerseys originales de Liga MX, Premier League, Champions League y más. Envío gratis a todo México.',
+    'Elige tu Mystery Box: Debutante ($799), Doble ($1,580), Hat-Trick ($2,249) o Jersey Club ($2,699). Jerseys originales de Liga MX, Premier League, Champions League y más. Envío gratis a todo México.',
   alternates: {
     canonical: 'https://cascaritajc.com/cajas',
   },
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     url: 'https://cascaritajc.com/cajas',
     title: 'Mystery Box de Jerseys Originales | La Cascarita Jersey Club',
     description:
-      'Desde $899 MXN. Recibe jerseys originales de sorpresa de las mejores ligas del mundo. Envío gratis incluido.',
+      'Desde $799 MXN. Recibe jerseys originales de sorpresa de las mejores ligas del mundo. Envío gratis incluido.',
   },
 }
 
@@ -33,7 +33,7 @@ const jsonLd = {
         offers: {
           '@type': 'Offer',
           priceCurrency: 'MXN',
-          price: '899.00',
+          price: '799.00',
           availability: 'https://schema.org/InStock',
           seller: { '@type': 'Organization', name: 'La Cascarita Jersey Club' },
         },
@@ -51,7 +51,7 @@ const jsonLd = {
         offers: {
           '@type': 'Offer',
           priceCurrency: 'MXN',
-          price: '1599.00',
+          price: '1580.00',
           availability: 'https://schema.org/InStock',
           seller: { '@type': 'Organization', name: 'La Cascarita Jersey Club' },
         },
@@ -69,7 +69,7 @@ const jsonLd = {
         offers: {
           '@type': 'Offer',
           priceCurrency: 'MXN',
-          price: '2499.00',
+          price: '2249.00',
           availability: 'https://schema.org/InStock',
           seller: { '@type': 'Organization', name: 'La Cascarita Jersey Club' },
         },
@@ -87,7 +87,7 @@ const jsonLd = {
         offers: {
           '@type': 'Offer',
           priceCurrency: 'MXN',
-          price: '2999.00',
+          price: '2699.00',
           availability: 'https://schema.org/InStock',
           seller: { '@type': 'Organization', name: 'La Cascarita Jersey Club' },
         },
