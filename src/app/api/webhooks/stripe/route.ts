@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const meta = session.metadata ?? {}
 
     // Parsear items del metadata
-    let firstItem = { boxId: meta.boxId ?? '', categoria: meta.categoria ?? '', talla: meta.talla ?? '', exclusiones: meta.exclusiones ?? '' }
+    let firstItem: { boxId: string; categoria: string; talla: string; exclusiones: string; tipo?: string } = { boxId: meta.boxId ?? '', categoria: meta.categoria ?? '', talla: meta.talla ?? '', exclusiones: meta.exclusiones ?? '' }
     if (meta.items) {
       try {
         const parsed = JSON.parse(meta.items)
