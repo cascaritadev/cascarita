@@ -9,7 +9,7 @@ const CartItemSchema = z.object({
   boxId: z.enum(['debutante', 'doble', 'hat-trick', 'jersey-club']),
   categoria: z.string().min(1),
   talla: z.string().min(1),
-  tipo: z.string().min(1), // 'actual' | 'mundialista' | 'retro'
+  tipo: z.string().min(1), // 'ligamx' | 'internacional' | 'selecciones' | 'retro'
   exclusiones: z.array(z.string()).max(5).optional(),
 })
 
@@ -71,7 +71,6 @@ export async function POST(req: NextRequest) {
             description: [
               boxInfo.description,
               `Tipo: ${item.tipo}`,
-              `Categoría: ${item.categoria}`,
               `Talla: ${item.talla}`,
               item.exclusiones?.length ? `Sin: ${item.exclusiones.join(', ')}` : '',
             ]

@@ -17,7 +17,7 @@ const BOXES = [
     priceDisplay: '$799',
     originalPrice: '$1,499',
     tag: 'KIT BASE',
-    categorias: ['Liga MX', 'Internacional', 'Selecciones'],
+    categorias: ['Liga MX', 'Internacional', 'Selecciones', 'Retro'],
     featured: false,
   },
   {
@@ -29,7 +29,7 @@ const BOXES = [
     priceDisplay: '$1,580',
     originalPrice: '$3,799',
     tag: null,
-    categorias: ['Liga MX', 'Internacional', 'Selecciones'],
+    categorias: ['Liga MX', 'Internacional', 'Selecciones', 'Retro'],
     featured: false,
   },
   {
@@ -41,7 +41,7 @@ const BOXES = [
     priceDisplay: '$2,249',
     originalPrice: '$3,799',
     tag: 'TRIPLE PACK',
-    categorias: ['Internacional', 'Liga MX', 'Selecciones'],
+    categorias: ['Liga MX', 'Internacional', 'Selecciones', 'Retro'],
     featured: false,
   },
   {
@@ -53,7 +53,7 @@ const BOXES = [
     priceDisplay: '$2,699',
     originalPrice: '$4,999',
     tag: 'MEJOR VALOR',
-    categorias: ['Mix (Recomendado)', 'Internacional', 'Liga MX'],
+    categorias: ['Mix (Recomendado)', 'Liga MX', 'Internacional', 'Selecciones', 'Retro'],
     featured: true,
   },
 ]

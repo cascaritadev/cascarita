@@ -12,16 +12,22 @@ const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL']
 
 const TIPOS = [
   {
-    id: 'actual',
-    label: 'Actual',
-    desc: 'Temporada en curso',
-    icon: 'new_releases',
+    id: 'ligamx',
+    label: 'Liga MX',
+    desc: 'Temporada actual nacional',
+    icon: 'stadium',
   },
   {
-    id: 'mundialista',
-    label: 'Mundialista',
-    desc: 'Edición selección',
-    icon: 'public',
+    id: 'internacional',
+    label: 'Internacional',
+    desc: 'Ligas europeas y mundiales',
+    icon: 'language',
+  },
+  {
+    id: 'selecciones',
+    label: 'Selecciones',
+    desc: 'Temporada mundialista',
+    icon: 'emoji_events',
   },
   {
     id: 'retro',
@@ -47,17 +53,27 @@ function ConfiguradorContent() {
   const boxInfo = BOX_LABELS[boxId] ?? BOX_LABELS.debutante
   const { addItem } = useCart()
 
+  const CATEGORIA_TO_TIPO: Record<string, string> = {
+    'Liga MX': 'ligamx',
+    'Internacional': 'internacional',
+    'Selecciones': 'selecciones',
+    'Retro': 'retro',
+  }
+
   const [selectedSize, setSelectedSize] = useState('M')
-  const [selectedTipo, setSelectedTipo] = useState('actual')
+  const [selectedTipo, setSelectedTipo] = useState(CATEGORIA_TO_TIPO[categoria] ?? '')
   const [exclusiones, setExclusiones] = useState<string[]>([])
-  const [inputEquipo, setInputEquipo] = useState('')
+  const [editingSlot, setEditingSlot] = useState<number | null>(null)
+  const [editingValue, setEditingValue] = useState('')
   const [added, setAdded] = useState(false)
 
-  function addExclusion() {
-    const trimmed = inputEquipo.trim()
-    if (!trimmed || exclusiones.length >= 5 || exclusiones.includes(trimmed)) return
-    setExclusiones([...exclusiones, trimmed])
-    setInputEquipo('')
+  function confirmSlot() {
+    const trimmed = editingValue.trim()
+    if (trimmed && !exclusiones.includes(trimmed)) {
+      setExclusiones([...exclusiones, trimmed])
+    }
+    setEditingSlot(null)
+    setEditingValue('')
   }
 
   function removeExclusion(eq: string) {
@@ -134,9 +150,8 @@ function ConfiguradorContent() {
               <span className="font-headline font-black text-2xl text-primary/20">02</span>
               <h2 className="font-headline font-bold text-xl uppercase tracking-tight">Tipo de Jersey</h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {TIPOS.map((tipo) => {
-                const isPremium = tipo.id === 'retro'
                 return (
                   <button
                     key={tipo.id}
@@ -147,11 +162,6 @@ function ConfiguradorContent() {
                         : 'border-outline-variant hover:border-primary'
                     }`}
                   >
-                    {isPremium && (
-                      <span className="absolute top-3 right-3 text-[9px] font-black uppercase tracking-widest bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
-                        $999/jersey
-                      </span>
-                    )}
                     <span className={`material-symbols-outlined text-3xl ${selectedTipo === tipo.id ? 'text-primary' : 'text-zinc-400'}`}>
                       {tipo.icon}
                     </span>
@@ -174,46 +184,62 @@ function ConfiguradorContent() {
               <span className="font-headline font-black text-2xl text-primary/20">03</span>
               <h2 className="font-headline font-bold text-xl uppercase tracking-tight">Equipos Excluidos</h2>
             </div>
-            <div className="bg-surface-container p-8 rounded-xl space-y-6">
+            <div className="bg-surface-container p-8 rounded-xl space-y-4">
               <p className="text-sm text-on-surface-variant leading-relaxed max-w-xl">
-                ¿Hay algún equipo que prefieras no recibir? Agrega hasta{' '}
-                <span className="font-bold text-primary">5 clubes</span> y nos aseguraremos de que no formen parte de tu unboxing.
+                ¿Hay algún equipo que prefieras no recibir? Haz clic en un chip vacío y escribe el nombre.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <input
-                  className="flex-grow bg-white border-0 py-4 px-6 rounded-lg shadow-sm focus:ring-2 focus:ring-primary font-medium text-on-surface placeholder:text-zinc-400 outline-none"
-                  placeholder="Escribe el nombre del equipo..."
-                  type="text"
-                  value={inputEquipo}
-                  onChange={(e) => setInputEquipo(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && addExclusion()}
-                  disabled={exclusiones.length >= 5}
-                />
-                <button
-                  onClick={addExclusion}
-                  disabled={exclusiones.length >= 5 || !inputEquipo.trim()}
-                  className="bg-primary text-on-primary px-8 py-4 font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-primary-container transition-colors disabled:opacity-40"
-                >
-                  Añadir
-                </button>
-              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+                {Array.from({ length: 5 }).map((_, i) => {
+                  const equipo = exclusiones[i]
+                  const isEditing = editingSlot === i
+                  const isNextAvailable = !equipo && !isEditing && i === exclusiones.length
 
-              <div className="flex flex-wrap gap-2">
-                {exclusiones.map((eq) => (
-                  <div key={eq} className="bg-white px-4 py-2 flex items-center gap-3 rounded-full border border-outline-variant/30">
-                    <span className="text-xs font-bold uppercase tracking-wider">{eq}</span>
-                    <button onClick={() => removeExclusion(eq)} className="material-symbols-outlined text-sm hover:text-error transition-colors">
-                      close
-                    </button>
-                  </div>
-                ))}
-                {exclusiones.length < 5 && (
-                  <div className="bg-zinc-200/50 px-4 py-2 flex items-center gap-3 rounded-full border border-dashed border-outline-variant/50">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
-                      Espacio disponible ({exclusiones.length}/5)
-                    </span>
-                  </div>
-                )}
+                  if (equipo) {
+                    return (
+                      <div key={i} className="flex items-center justify-between gap-2 bg-white border-2 border-primary/30 px-4 py-3 rounded-xl min-h-[52px]">
+                        <span className="text-xs font-black uppercase tracking-wide truncate">{equipo}</span>
+                        <button onClick={() => removeExclusion(equipo)} className="material-symbols-outlined text-base text-zinc-400 hover:text-error transition-colors shrink-0">
+                          close
+                        </button>
+                      </div>
+                    )
+                  }
+
+                  if (isEditing) {
+                    return (
+                      <div key={i} className="border-2 border-primary bg-white rounded-xl min-h-[52px] px-3 flex items-center">
+                        <input
+                          autoFocus
+                          className="w-full text-xs font-black uppercase tracking-wide outline-none bg-transparent placeholder:text-zinc-300 placeholder:normal-case placeholder:tracking-normal"
+                          placeholder="Equipo..."
+                          value={editingValue}
+                          onChange={(e) => setEditingValue(e.target.value)}
+                          onKeyDown={(e) => { if (e.key === 'Enter') confirmSlot(); if (e.key === 'Escape') { setEditingSlot(null); setEditingValue('') } }}
+                          onBlur={confirmSlot}
+                        />
+                      </div>
+                    )
+                  }
+
+                  if (isNextAvailable) {
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => { setEditingSlot(i); setEditingValue('') }}
+                        className="flex items-center justify-center gap-2 border-2 border-dashed border-outline-variant/50 hover:border-primary hover:bg-white transition-all rounded-xl min-h-[52px] group"
+                      >
+                        <span className="material-symbols-outlined text-base text-zinc-300 group-hover:text-primary transition-colors">add</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-300 group-hover:text-primary transition-colors">Agregar</span>
+                      </button>
+                    )
+                  }
+
+                  return (
+                    <div key={i} className="flex items-center justify-center border-2 border-dashed border-outline-variant/20 rounded-xl min-h-[52px]">
+                      <span className="text-[10px] font-bold tracking-widest text-zinc-200">{i + 1}</span>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -227,9 +253,8 @@ function ConfiguradorContent() {
               <div className="space-y-4">
                 {[
                   { label: 'Producto', value: `${boxInfo.name} (${boxInfo.jerseys} jersey${boxInfo.jerseys > 1 ? 's' : ''})` },
-                  { label: 'Categoría', value: categoria },
                   { label: 'Talla', value: selectedSize },
-                  { label: 'Tipo', value: TIPOS.find((t) => t.id === selectedTipo)?.label ?? selectedTipo },
+                  { label: 'Tipo', value: TIPOS.find((t) => t.id === selectedTipo)?.label ?? 'Por seleccionar' },
                 ].map((row) => (
                   <div key={row.label} className="flex justify-between items-center py-3 border-b border-surface-container">
                     <span className="text-xs font-bold uppercase tracking-wider text-secondary">{row.label}</span>
@@ -261,10 +286,12 @@ function ConfiguradorContent() {
                 </div>
                 <button
                   onClick={handleAgregarAlCarrito}
-                  disabled={added}
+                  disabled={added || !selectedTipo}
                   className={`w-full py-5 rounded-lg font-black uppercase tracking-[0.2em] text-sm transition-all flex items-center justify-center gap-3 ${
                     added
                       ? 'bg-emerald-500 text-white scale-95'
+                      : !selectedTipo
+                      ? 'bg-zinc-200 text-zinc-400 cursor-not-allowed'
                       : 'kinetic-gradient text-on-primary shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95'
                   }`}
                 >

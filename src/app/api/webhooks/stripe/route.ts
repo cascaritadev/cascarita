@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
       stripePaymentId: session.payment_intent as string ?? null,
       status: 'PAID' as const,
       boxType: firstItem.boxId,
-      categoria: firstItem.categoria ?? '',
+      categoria: firstItem.tipo ?? firstItem.categoria ?? '',
       talla: firstItem.talla ?? '',
       exclusiones: firstItem.exclusiones ? firstItem.exclusiones.split(',').filter(Boolean) : [],
       amountSubtotal,

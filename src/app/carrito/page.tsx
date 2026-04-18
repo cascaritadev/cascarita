@@ -179,7 +179,6 @@ export default function CarritoPage() {
                       </h3>
                       <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-bold uppercase tracking-wide text-on-surface-variant">
                         <span>Talla: <span className="text-on-surface">{item.talla}</span></span>
-                        <span>Categoría: <span className="text-on-surface">{item.categoria}</span></span>
                         <span>Tipo: <span className="text-on-surface capitalize">{item.tipo}</span></span>
                         <span>{item.jerseys} jersey{item.jerseys > 1 ? 's' : ''}</span>
                       </div>
