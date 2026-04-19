@@ -37,11 +37,13 @@ export async function POST(req: NextRequest) {
     // Resolver promotion code (si lo hay) a su ID de Stripe
     let discounts: { promotion_code: string }[] | undefined
     let promoMetadata: { code?: string; person?: string; type?: string } = {}
+    let isFreePromo = false
     if (promoCode) {
       const list = await getStripe().promotionCodes.list({
         code: promoCode.toUpperCase(),
         active: true,
         limit: 1,
+        expand: ['data.coupon'],
       })
       const promo = list.data[0]
       if (!promo) {
@@ -50,26 +52,33 @@ export async function POST(req: NextRequest) {
       if (promo.max_redemptions && promo.times_redeemed >= promo.max_redemptions) {
         return NextResponse.json({ error: 'Este código ya fue utilizado.' }, { status: 400 })
       }
-      discounts = [{ promotion_code: promo.id }]
       promoMetadata = {
         code: promo.code,
         person: (promo.metadata?.person as string) ?? '',
         type: (promo.metadata?.type as string) ?? '',
       }
+      // Si el cupón es 100% off, cobrar $15 MXN fijos (Stripe exige mínimo $10 MXN)
+      if (promo.coupon.percent_off === 100) {
+        isFreePromo = true
+      } else {
+        discounts = [{ promotion_code: promo.id }]
+      }
     }
 
     // Build Stripe line_items from cart
+    // Código 100% off → cobrar $15 MXN fijos por caja (Stripe requiere mínimo $10 MXN)
+    const FREE_PROMO_AMOUNT = 1500 // centavos = $15.00 MXN
     const line_items = items.map((item) => {
       const boxInfo = BOX_PRICES[item.boxId]
       return {
         quantity: 1,
         price_data: {
           currency: 'mxn',
-          unit_amount: getBoxPrice(item.boxId, item.tipo),
+          unit_amount: isFreePromo ? FREE_PROMO_AMOUNT : getBoxPrice(item.boxId, item.tipo),
           product_data: {
             name: boxInfo.name,
             description: [
-              boxInfo.description,
+              isFreePromo ? 'Precio especial con código 100% de descuento' : boxInfo.description,
               `Tipo: ${item.tipo}`,
               `Talla: ${item.talla}`,
               item.exclusiones?.length ? `Sin: ${item.exclusiones.join(', ')}` : '',
