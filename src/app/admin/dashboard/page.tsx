@@ -78,7 +78,6 @@ export default function DashboardPage() {
   const router = useRouter()
   const [stats, setStats] = useState<Stats | null>(null)
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.replace('/login?callbackUrl=/admin/dashboard')
@@ -116,7 +115,7 @@ export default function DashboardPage() {
           <h1 className="font-headline font-black text-2xl uppercase tracking-tighter">Dashboard · La Cascarita</h1>
           <p className="text-emerald-300 text-xs font-bold uppercase tracking-widest mt-0.5">Estadísticas y métricas</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <Link
             href="/admin"
             className="px-4 py-2 text-xs font-black uppercase tracking-wider border border-emerald-300 text-emerald-300 hover:bg-emerald-300 hover:text-primary transition-colors"

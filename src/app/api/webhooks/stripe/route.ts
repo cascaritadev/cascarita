@@ -3,6 +3,7 @@ import Stripe from 'stripe'
 import { getStripe } from '@/lib/stripe'
 import { prisma } from '@/lib/db'
 import { createShipment } from '@/lib/skydropx'
+import { sendOrderConfirmationEmail } from '@/lib/email'
 
 // Necesario para leer el raw body del webhook
 export const runtime = 'nodejs'
@@ -103,7 +104,28 @@ export async function POST(req: NextRequest) {
       update: orderData,
     })
 
-    // 2. Crear envío en SkyDropX (solo si tenemos dirección y aún no tiene guía)
+    // 2. Enviar correo de confirmación al cliente
+    try {
+      await sendOrderConfirmationEmail({
+        orderId: order.id,
+        email,
+        shippingName,
+        boxType: firstItem.boxId,
+        categoria: firstItem.tipo ?? firstItem.categoria ?? '',
+        talla: firstItem.talla ?? '',
+        exclusiones: firstItem.exclusiones ? firstItem.exclusiones.split(',').filter(Boolean) : [],
+        amountTotal: session.amount_total ?? 0,
+        amountSubtotal,
+        amountDiscount: amountDiscount || null,
+        promoCode,
+        shippingCity: shippingAddr?.city ?? null,
+        shippingState: shippingAddr?.state ?? null,
+      })
+    } catch (err) {
+      console.error(`[WEBHOOK] Error enviando email a ${email}:`, err)
+    }
+
+    // 3. Crear envío en SkyDropX (solo si tenemos dirección y aún no tiene guía)
     if (shippingAddr?.line1 && !order.trackingNumber) {
       const shipResult = await createShipment({
         boxType: firstItem.boxId,

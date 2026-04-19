@@ -61,6 +61,8 @@ export default function AdminPage() {
   const [editEta, setEditEta] = useState('')
   const [saving, setSaving] = useState(false)
   const [filter, setFilter] = useState('ALL')
+  const [emailSending, setEmailSending] = useState<string | null>(null)
+  const [emailToast, setEmailToast] = useState<{ id: string; msg: string; ok: boolean } | null>(null)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -88,6 +90,19 @@ export default function AdminPage() {
     setEditEta(order.estimatedDelivery
       ? new Date(order.estimatedDelivery).toISOString().split('T')[0]
       : '')
+  }
+
+  async function sendEmail(orderId: string, type: 'confirmation' | 'shipping' | 'status') {
+    setEmailSending(`${orderId}-${type}`)
+    const res = await fetch(`/api/admin/orders/${orderId}/send-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type }),
+    })
+    const data = await res.json()
+    setEmailToast({ id: orderId, msg: res.ok ? 'Correo enviado ✓' : (data.error ?? 'Error'), ok: res.ok })
+    setEmailSending(null)
+    setTimeout(() => setEmailToast(null), 3000)
   }
 
   async function saveEdit(orderId: string) {
@@ -312,13 +327,52 @@ export default function AdminPage() {
                         </button>
                       </div>
                     ) : (
-                      <button
-                        onClick={() => startEdit(order)}
-                        className="flex items-center gap-1 text-zinc-400 hover:text-primary transition-colors text-[10px] font-bold uppercase tracking-wider"
-                      >
-                        <span className="material-symbols-outlined text-sm">edit</span>
-                        Editar
-                      </button>
+                      <div className="flex flex-col gap-1.5">
+                        <button
+                          onClick={() => startEdit(order)}
+                          className="flex items-center gap-1 text-zinc-400 hover:text-primary transition-colors text-[10px] font-bold uppercase tracking-wider"
+                        >
+                          <span className="material-symbols-outlined text-sm">edit</span>
+                          Editar
+                        </button>
+                        <div className="flex gap-1">
+                          <button
+                            title="Reenviar confirmación de pago"
+                            disabled={emailSending === `${order.id}-confirmation`}
+                            onClick={() => sendEmail(order.id, 'confirmation')}
+                            className="px-1.5 py-1 text-[9px] font-black uppercase tracking-wider border border-blue-200 text-blue-500 hover:bg-blue-50 disabled:opacity-40 transition-colors"
+                          >
+                            {emailSending === `${order.id}-confirmation`
+                              ? <span className="material-symbols-outlined text-xs animate-spin">progress_activity</span>
+                              : <span className="material-symbols-outlined text-xs">payment</span>}
+                          </button>
+                          <button
+                            title="Enviar correo de guía/tracking"
+                            disabled={emailSending === `${order.id}-shipping` || !order.trackingNumber}
+                            onClick={() => sendEmail(order.id, 'shipping')}
+                            className="px-1.5 py-1 text-[9px] font-black uppercase tracking-wider border border-emerald-200 text-emerald-600 hover:bg-emerald-50 disabled:opacity-40 transition-colors"
+                          >
+                            {emailSending === `${order.id}-shipping`
+                              ? <span className="material-symbols-outlined text-xs animate-spin">progress_activity</span>
+                              : <span className="material-symbols-outlined text-xs">local_shipping</span>}
+                          </button>
+                          <button
+                            title="Enviar correo de cambio de status"
+                            disabled={emailSending === `${order.id}-status`}
+                            onClick={() => sendEmail(order.id, 'status')}
+                            className="px-1.5 py-1 text-[9px] font-black uppercase tracking-wider border border-purple-200 text-purple-500 hover:bg-purple-50 disabled:opacity-40 transition-colors"
+                          >
+                            {emailSending === `${order.id}-status`
+                              ? <span className="material-symbols-outlined text-xs animate-spin">progress_activity</span>
+                              : <span className="material-symbols-outlined text-xs">notifications</span>}
+                          </button>
+                        </div>
+                        {emailToast?.id === order.id && (
+                          <p className={`text-[9px] font-bold ${emailToast.ok ? 'text-emerald-600' : 'text-red-500'}`}>
+                            {emailToast.msg}
+                          </p>
+                        )}
+                      </div>
                     )}
                   </td>
                 </tr>
