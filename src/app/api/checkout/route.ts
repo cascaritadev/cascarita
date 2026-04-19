@@ -57,8 +57,17 @@ export async function POST(req: NextRequest) {
         person: (promo.metadata?.person as string) ?? '',
         type: (promo.metadata?.type as string) ?? '',
       }
-      // Si el cupón es 100% off, cobrar $15 MXN fijos (Stripe exige mínimo $10 MXN)
-      if (promo.coupon.percent_off === 100) {
+      // Calcular total después del descuento para verificar mínimo de Stripe ($10 MXN)
+      const subtotal = items.reduce((sum, item) => sum + getBoxPrice(item.boxId, item.tipo), 0)
+      const coupon = promo.coupon
+      let totalAfterDiscount = subtotal
+      if (coupon.percent_off) {
+        totalAfterDiscount = Math.round(subtotal * (1 - coupon.percent_off / 100))
+      } else if (coupon.amount_off) {
+        totalAfterDiscount = Math.max(0, subtotal - coupon.amount_off)
+      }
+      // Si el total quedaría menor a $15 MXN, cobrar fijo $15/caja (Stripe mínimo $10 MXN)
+      if (totalAfterDiscount < 1500) {
         isFreePromo = true
       } else {
         discounts = [{ promotion_code: promo.id }]

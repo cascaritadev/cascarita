@@ -37,7 +37,9 @@ export default function CarritoPage() {
       ? Math.round((subtotal * promo.percentOff) / 100)
       : 0
     : 0
-  const total = Math.max(subtotal - discount, 0)
+  const MIN_PROMO_AMOUNT = 1500 // $15 MXN — mínimo cuando el descuento deja < $15
+  const rawTotal = Math.max(subtotal - discount, 0)
+  const total = promo && rawTotal < MIN_PROMO_AMOUNT ? MIN_PROMO_AMOUNT : rawTotal
   const totalDisplay = formatMXN(total)
 
   async function handleApplyPromo() {
@@ -297,7 +299,7 @@ export default function CarritoPage() {
                   {discount > 0 && (
                     <div className="flex justify-between items-center text-sm pt-2">
                       <span className="text-emerald-700 uppercase tracking-wider text-[11px] font-bold">Descuento</span>
-                      <span className="text-emerald-700 font-bold">−{formatMXN(discount)}</span>
+                      <span className="text-emerald-700 font-bold">−{formatMXN(subtotal - total)}</span>
                     </div>
                   )}
 
