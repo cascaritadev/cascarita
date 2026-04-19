@@ -66,8 +66,9 @@ export async function POST(req: NextRequest) {
       } else if (coupon.amount_off) {
         totalAfterDiscount = Math.max(0, subtotal - coupon.amount_off)
       }
-      // Si el total quedaría menor a $15 MXN, cobrar fijo $15/caja (Stripe mínimo $10 MXN)
-      if (totalAfterDiscount < 1500) {
+      // $15 mínimo solo aplica si TODAS las cajas son individuales (debutante)
+      const soloIndividuales = items.every((i) => i.boxId === 'debutante')
+      if (totalAfterDiscount < 1500 && soloIndividuales) {
         isFreePromo = true
       } else {
         discounts = [{ promotion_code: promo.id }]
