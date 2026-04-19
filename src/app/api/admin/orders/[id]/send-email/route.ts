@@ -4,14 +4,15 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { sendOrderConfirmationEmail, sendShippingEmail, sendStatusEmail } from '@/lib/email'
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
   if (session?.user?.email !== process.env.ADMIN_EMAIL) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   }
 
+  const { id } = await params
   const { type } = await req.json()
-  const order = await prisma.order.findUnique({ where: { id: params.id } })
+  const order = await prisma.order.findUnique({ where: { id } })
   if (!order) return NextResponse.json({ error: 'Pedido no encontrado' }, { status: 404 })
 
   try {
