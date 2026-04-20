@@ -53,11 +53,17 @@ function ConfiguradorContent() {
     'Retro': 'retro',
   }
 
+  const ESTAMPADO_PRICE = 20000 // $200 MXN en centavos
+
   const [selectedSize, setSelectedSize] = useState('M')
   const [selectedTipo, setSelectedTipo] = useState(CATEGORIA_TO_TIPO[categoria] ?? '')
   const [exclusiones, setExclusiones] = useState<string[]>([])
   const [editingSlot, setEditingSlot] = useState<number | null>(null)
   const [editingValue, setEditingValue] = useState('')
+  const [mensajeRegalo, setMensajeRegalo] = useState('')
+  const [estampado, setEstampado] = useState(false)
+  const [nombreEstampado, setNombreEstampado] = useState('')
+  const [numeroEstampado, setNumeroEstampado] = useState('')
   const [added, setAdded] = useState(false)
 
   function confirmSlot() {
@@ -73,7 +79,8 @@ function ConfiguradorContent() {
     setExclusiones(exclusiones.filter((e) => e !== eq))
   }
 
-  const computedPrice = getBoxPrice(boxId, selectedTipo)
+  const basePrice = getBoxPrice(boxId, selectedTipo)
+  const computedPrice = basePrice + (estampado ? ESTAMPADO_PRICE : 0)
   const computedPriceDisplay = formatMXN(computedPrice)
 
   function handleAgregarAlCarrito() {
@@ -84,6 +91,10 @@ function ConfiguradorContent() {
       talla: selectedSize,
       tipo: selectedTipo,
       exclusiones,
+      mensajeRegalo: mensajeRegalo.trim() || undefined,
+      estampado,
+      nombreEstampado: estampado ? nombreEstampado.trim() || undefined : undefined,
+      numeroEstampado: estampado ? numeroEstampado.trim() || undefined : undefined,
       price: computedPrice,
       priceDisplay: computedPriceDisplay,
       jerseys: boxInfo.jerseys,
@@ -236,6 +247,95 @@ function ConfiguradorContent() {
               </div>
             </div>
           </div>
+
+          {/* Step 4: Mensaje de regalo */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              <span className="font-headline font-black text-2xl text-primary/20">04</span>
+              <h2 className="font-headline font-bold text-xl uppercase tracking-tight">Mensaje de Regalo</h2>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 bg-zinc-100 px-2 py-0.5 rounded">Opcional</span>
+            </div>
+            <div className="bg-surface-container p-8 rounded-xl space-y-4">
+              <p className="text-sm text-on-surface-variant leading-relaxed max-w-xl">
+                ¿Es un regalo? Escribe un mensaje y lo incluimos en el paquete.
+              </p>
+              <div className="relative">
+                <textarea
+                  maxLength={150}
+                  rows={3}
+                  value={mensajeRegalo}
+                  onChange={(e) => setMensajeRegalo(e.target.value)}
+                  placeholder="Ej: ¡Feliz cumpleaños! Espero que disfrutes tu jersey sorpresa"
+                  className="w-full border-2 border-outline-variant rounded-xl px-4 py-3 text-sm font-medium resize-none outline-none focus:border-primary transition-colors placeholder:text-zinc-300"
+                />
+                <span className={`absolute bottom-3 right-4 text-[10px] font-bold ${mensajeRegalo.length >= 140 ? 'text-red-400' : 'text-zinc-300'}`}>
+                  {mensajeRegalo.length}/150
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Extra: Estampado */}
+          <div className="space-y-4">
+            <h2 className="font-headline font-bold text-xl uppercase tracking-tight">Extra</h2>
+            <button
+              onClick={() => setEstampado((prev) => !prev)}
+              className={`w-full flex items-center justify-between gap-4 p-6 rounded-xl border-2 transition-all text-left ${
+                estampado
+                  ? 'border-primary bg-emerald-50 shadow-md'
+                  : 'border-outline-variant hover:border-primary'
+              }`}
+            >
+              <div className="flex items-center gap-4">
+                <span className={`material-symbols-outlined text-3xl ${estampado ? 'text-primary' : 'text-zinc-400'}`}>
+                  style
+                </span>
+                <div>
+                  <p className="font-headline font-black text-lg uppercase tracking-tight">Jersey Estampado</p>
+                  <p className="text-xs text-on-surface-variant font-medium">Personaliza tu jersey con nombre y número</p>
+                </div>
+              </div>
+              <div className="flex flex-col items-end shrink-0">
+                <span className={`text-lg font-black font-headline ${estampado ? 'text-primary' : 'text-zinc-400'}`}>+$200</span>
+                <span className={`text-[10px] font-black uppercase tracking-widest ${estampado ? 'text-primary' : 'text-zinc-300'}`}>
+                  {estampado ? 'Seleccionado ✓' : 'MXN'}
+                </span>
+              </div>
+            </button>
+
+            {estampado && (
+              <div className="grid grid-cols-2 gap-4 bg-surface-container p-6 rounded-xl">
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                    Nombre <span className="text-zinc-400 font-normal normal-case tracking-normal">(máx. 6 letras)</span>
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={6}
+                    value={nombreEstampado}
+                    onChange={(e) => setNombreEstampado(e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]/g, '').toUpperCase())}
+                    placeholder="LOPEZ"
+                    className="w-full border-2 border-outline-variant rounded-lg px-4 py-3 text-sm font-black uppercase tracking-widest outline-none focus:border-primary transition-colors placeholder:text-zinc-300 placeholder:normal-case placeholder:tracking-normal placeholder:font-normal"
+                  />
+                  <p className="text-[9px] text-zinc-400">{nombreEstampado.length}/6</p>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                    Número <span className="text-zinc-400 font-normal normal-case tracking-normal">(2 dígitos)</span>
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={2}
+                    value={numeroEstampado}
+                    onChange={(e) => setNumeroEstampado(e.target.value.replace(/\D/g, ''))}
+                    placeholder="10"
+                    className="w-full border-2 border-outline-variant rounded-lg px-4 py-3 text-sm font-black tracking-widest outline-none focus:border-primary transition-colors placeholder:text-zinc-300 placeholder:font-normal"
+                  />
+                  <p className="text-[9px] text-zinc-400">{numeroEstampado.length}/2</p>
+                </div>
+              </div>
+            )}
+          </div>
         </section>
 
         {/* ── Summary Sidebar ───────────────────────────── */}
@@ -263,6 +363,32 @@ function ConfiguradorContent() {
                         <p key={eq} className="text-[10px] font-bold uppercase">{eq}</p>
                       ))}
                     </div>
+                  </div>
+                )}
+
+                {mensajeRegalo.trim() && (
+                  <div className="flex justify-between items-start py-3 border-b border-surface-container">
+                    <span className="text-xs font-bold uppercase tracking-wider text-secondary shrink-0 mr-3">Regalo</span>
+                    <p className="text-[10px] font-bold text-right leading-relaxed">{mensajeRegalo}</p>
+                  </div>
+                )}
+
+                {estampado && (
+                  <div className="py-3 border-b border-surface-container space-y-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs font-bold uppercase tracking-wider text-secondary">Estampado</span>
+                      <span className="text-[10px] font-bold uppercase px-2 py-1 bg-primary/10 text-primary rounded">+$200</span>
+                    </div>
+                    {(nombreEstampado || numeroEstampado) && (
+                      <div className="flex gap-3 justify-end">
+                        {nombreEstampado && (
+                          <span className="text-[10px] font-black uppercase tracking-widest text-on-surface">{nombreEstampado}</span>
+                        )}
+                        {numeroEstampado && (
+                          <span className="text-[10px] font-black text-on-surface">#{numeroEstampado}</span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
 

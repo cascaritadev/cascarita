@@ -13,6 +13,10 @@ type Order = {
   categoria: string
   talla: string
   exclusiones: string[]
+  mensajeRegalo: string | null
+  estampado: boolean
+  nombreEstampado: string | null
+  numeroEstampado: string | null
   amountTotal: number
   trackingNumber: string | null
   trackingUrl: string | null
@@ -236,6 +240,18 @@ export default function AdminPage() {
 
                   <td className="px-4 py-3">
                     <p className="font-bold text-xs capitalize">{order.categoria}</p>
+                    {order.estampado && (
+                      <div className="mt-1 space-y-0.5">
+                        <span className="inline-block bg-primary/10 text-primary text-[9px] font-black px-1.5 py-0.5 rounded">
+                          ESTAMPADO
+                        </span>
+                        {(order.nombreEstampado || order.numeroEstampado) && (
+                          <p className="text-[9px] font-black text-primary">
+                            {order.nombreEstampado ?? '—'} #{order.numeroEstampado ?? '—'}
+                          </p>
+                        )}
+                      </div>
+                    )}
                     {order.exclusiones.length > 0 ? (
                       <div className="flex flex-wrap gap-1 mt-1">
                         {order.exclusiones.map((eq) => (
@@ -246,6 +262,12 @@ export default function AdminPage() {
                       </div>
                     ) : (
                       <p className="text-[10px] text-zinc-300 italic">Sin excl.</p>
+                    )}
+                    {order.mensajeRegalo && (
+                      <div className="mt-1.5 bg-amber-50 border border-amber-200 rounded px-2 py-1 max-w-[200px]">
+                        <p className="text-[9px] font-black uppercase text-amber-600 mb-0.5">🎁 Mensaje</p>
+                        <p className="text-[10px] text-zinc-600 leading-tight break-words">{order.mensajeRegalo}</p>
+                      </div>
                     )}
                   </td>
 

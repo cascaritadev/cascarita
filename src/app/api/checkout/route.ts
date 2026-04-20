@@ -5,12 +5,18 @@ import { getStripe, BOX_PRICES } from '@/lib/stripe'
 import { getBoxPrice } from '@/lib/pricing'
 import { authOptions } from '@/lib/auth'
 
+const ESTAMPADO_PRICE = 20000 // $200 MXN en centavos
+
 const CartItemSchema = z.object({
   boxId: z.enum(['debutante', 'doble', 'hat-trick', 'jersey-club']),
   categoria: z.string().min(1),
   talla: z.string().min(1),
   tipo: z.string().min(1), // 'clubes' | 'selecciones' | 'retro'
   exclusiones: z.array(z.string()).max(5).optional(),
+  mensajeRegalo: z.string().max(150).optional(),
+  estampado: z.boolean().optional(),
+  nombreEstampado: z.string().max(6).optional(),
+  numeroEstampado: z.string().max(2).optional(),
 })
 
 const CheckoutSchema = z.object({
@@ -80,18 +86,22 @@ export async function POST(req: NextRequest) {
     const FREE_PROMO_AMOUNT = 1500 // centavos = $15.00 MXN
     const line_items = items.map((item) => {
       const boxInfo = BOX_PRICES[item.boxId]
+      const baseAmount = isFreePromo ? FREE_PROMO_AMOUNT : getBoxPrice(item.boxId, item.tipo)
+      const unitAmount = baseAmount + (item.estampado ? ESTAMPADO_PRICE : 0)
       return {
         quantity: 1,
         price_data: {
           currency: 'mxn',
-          unit_amount: isFreePromo ? FREE_PROMO_AMOUNT : getBoxPrice(item.boxId, item.tipo),
+          unit_amount: unitAmount,
           product_data: {
-            name: boxInfo.name,
+            name: boxInfo.name + (item.estampado ? ' + Estampado' : ''),
             description: [
               isFreePromo ? 'Precio especial con código 100% de descuento' : boxInfo.description,
               `Tipo: ${item.tipo}`,
               `Talla: ${item.talla}`,
+              item.estampado ? `Estampado: ${item.nombreEstampado ?? '—'} #${item.numeroEstampado ?? '—'} (+$200)` : '',
               item.exclusiones?.length ? `Sin: ${item.exclusiones.join(', ')}` : '',
+              item.mensajeRegalo ? `Regalo: ${item.mensajeRegalo}` : '',
             ]
               .filter(Boolean)
               .join(' · '),
@@ -112,6 +122,10 @@ export async function POST(req: NextRequest) {
           talla: i.talla,
           tipo: i.tipo,
           exclusiones: (i.exclusiones ?? []).join(','),
+          mensajeRegalo: i.mensajeRegalo ?? '',
+          estampado: i.estampado ?? false,
+          nombreEstampado: i.nombreEstampado ?? '',
+          numeroEstampado: i.numeroEstampado ?? '',
         }))
       ),
       promoCode: promoMetadata.code ?? '',

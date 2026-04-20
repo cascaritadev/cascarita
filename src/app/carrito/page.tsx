@@ -98,6 +98,10 @@ export default function CarritoPage() {
             talla: item.talla,
             tipo: item.tipo,
             exclusiones: item.exclusiones,
+            mensajeRegalo: item.mensajeRegalo,
+            estampado: item.estampado,
+            nombreEstampado: item.nombreEstampado,
+            numeroEstampado: item.numeroEstampado,
           })),
           ...(promo ? { promoCode: promo.code } : {}),
         }),
@@ -193,6 +197,24 @@ export default function CarritoPage() {
                               {eq}
                             </span>
                           ))}
+                        </div>
+                      )}
+                      {item.estampado && (
+                        <div className="mt-2 flex items-center gap-2 flex-wrap">
+                          <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-black uppercase">
+                            Estampado +$200
+                          </span>
+                          {(item.nombreEstampado || item.numeroEstampado) && (
+                            <span className="text-[10px] font-black text-primary uppercase">
+                              {item.nombreEstampado ?? ''} {item.numeroEstampado ? `#${item.numeroEstampado}` : ''}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      {item.mensajeRegalo && (
+                        <div className="mt-2 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                          <p className="text-[9px] font-black uppercase text-amber-500 mb-0.5">🎁 Mensaje de regalo</p>
+                          <p className="text-[10px] text-zinc-600 leading-relaxed">{item.mensajeRegalo}</p>
                         </div>
                       )}
                     </div>

@@ -10,6 +10,10 @@ export type CartItem = {
   talla: string
   tipo: string
   exclusiones: string[]
+  mensajeRegalo?: string
+  estampado?: boolean
+  nombreEstampado?: string
+  numeroEstampado?: string
   price: number
   priceDisplay: string
   jerseys: number
