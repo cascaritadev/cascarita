@@ -10,9 +10,9 @@ const transporter = nodemailer.createTransport({
 
 const BOX_NAMES: Record<string, string> = {
   debutante: 'Mystery Box Debutante',
-  doble: 'Mystery Box Doble',
+  doble: 'Mystery Box Doblete',
   'hat-trick': 'Mystery Box Hat-Trick',
-  'jersey-club': 'Mystery Box Jersey Club',
+  'jersey-club': 'Mystery Box Poker',
 }
 
 function formatMXN(centavos: number) {

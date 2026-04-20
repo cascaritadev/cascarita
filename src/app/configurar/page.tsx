@@ -12,16 +12,10 @@ const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL']
 
 const TIPOS = [
   {
-    id: 'ligamx',
-    label: 'Liga MX',
-    desc: 'Temporada actual nacional',
+    id: 'clubes',
+    label: 'Clubes',
+    desc: 'Clubes nacionales e internacionales',
     icon: 'stadium',
-  },
-  {
-    id: 'internacional',
-    label: 'Internacional',
-    desc: 'Ligas europeas y mundiales',
-    icon: 'language',
   },
   {
     id: 'selecciones',
@@ -39,23 +33,22 @@ const TIPOS = [
 
 const BOX_LABELS: Record<string, { name: string; jerseys: number }> = {
   debutante: { name: 'Debutante', jerseys: 1 },
-  doble: { name: 'Doble', jerseys: 2 },
+  doble: { name: 'Doblete', jerseys: 2 },
   'hat-trick': { name: 'Hat-Trick', jerseys: 3 },
-  'jersey-club': { name: 'Jersey Club', jerseys: 4 },
+  'jersey-club': { name: 'Poker', jerseys: 4 },
 }
 
 function ConfiguradorContent() {
   const router = useRouter()
   const params = useSearchParams()
   const boxId = params.get('box') ?? 'debutante'
-  const categoria = params.get('categoria') ?? 'Liga MX'
+  const categoria = params.get('categoria') ?? 'Clubes'
 
   const boxInfo = BOX_LABELS[boxId] ?? BOX_LABELS.debutante
   const { addItem } = useCart()
 
   const CATEGORIA_TO_TIPO: Record<string, string> = {
-    'Liga MX': 'ligamx',
-    'Internacional': 'internacional',
+    'Clubes': 'clubes',
     'Selecciones': 'selecciones',
     'Retro': 'retro',
   }
@@ -312,7 +305,7 @@ function ConfiguradorContent() {
               <div className="flex items-center gap-3 bg-surface-container-low p-4 rounded-lg">
                 <span className="material-symbols-outlined text-primary">verified</span>
                 <p className="text-[10px] font-bold uppercase tracking-tight leading-tight">
-                  Garantía de Autenticidad KINETIC PRECISION
+                  Garantía de KINETIC PRECISION
                 </p>
               </div>
             </div>

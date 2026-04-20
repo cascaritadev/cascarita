@@ -46,7 +46,7 @@ export default function RegistroPage() {
             LA CASCARITA
           </h1>
           <p className="font-body text-xl text-primary-fixed-dim/80 leading-relaxed max-w-sm">
-            Únete al club. Jerseys auténticos, entregas de élite.
+            Únete al club. Jerseys únicos, entregas de élite.
           </p>
         </div>
       </section>

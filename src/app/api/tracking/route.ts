@@ -24,9 +24,9 @@ const STATUS_MAP: Record<string, { label: string; stepIndex: number }> = {
 
 const BOX_DISPLAY: Record<string, string> = {
   debutante:     'La Inicial (1 Jersey)',
-  doble:         'Doble (2 Jerseys)',
+  doble:         'Doblete (2 Jerseys)',
   'hat-trick':   'Hat-Trick (3 Jerseys)',
-  'jersey-club': 'La Escuadra Completa (4 Jerseys)',
+  'jersey-club': 'Poker (4 Jerseys)',
 }
 
 export async function GET(req: NextRequest) {

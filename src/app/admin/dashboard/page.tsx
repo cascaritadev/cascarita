@@ -46,9 +46,9 @@ type Stats = {
 
 const BOX_LABELS: Record<string, string> = {
   debutante: 'La Inicial',
-  doble: 'Doble',
+  doble: 'Doblete',
   'hat-trick': 'Hat-Trick',
-  'jersey-club': 'Escuadra',
+  'jersey-club': 'Poker',
 }
 
 const STATUS_LABELS: Record<string, string> = {

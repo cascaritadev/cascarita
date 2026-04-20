@@ -11,58 +11,58 @@ const BOXES = [
   {
     id: 'debutante',
     name: 'Debutante',
-    subtitle: 'Single Authentic Jersey',
+    subtitle: 'Tu Primera Jugada de Élite',
     jerseys: 1,
     price: 79900,
     priceDisplay: '$799',
     originalPrice: '$1,499',
     tag: 'KIT BASE',
-    categorias: ['Liga MX', 'Internacional', 'Selecciones', 'Retro'],
+    categorias: ['Clubes', 'Selecciones', 'Retro'],
     featured: false,
   },
   {
     id: 'doble',
-    name: 'Doble',
-    subtitle: 'Duo Kit Bundle',
+    name: 'Doblete',
+    subtitle: 'Paquete Doble de Élite',
     jerseys: 2,
     price: 158000,
     priceDisplay: '$1,580',
     originalPrice: '$3,799',
     tag: null,
-    categorias: ['Liga MX', 'Internacional', 'Selecciones', 'Retro'],
+    categorias: ['Clubes', 'Selecciones', 'Retro'],
     featured: false,
   },
   {
     id: 'hat-trick',
     name: 'Hat-Trick',
-    subtitle: 'Triple Performance Pack',
+    subtitle: 'Pack Triple de Alto Rendimiento',
     jerseys: 3,
     price: 224900,
     priceDisplay: '$2,249',
     originalPrice: '$3,799',
     tag: 'TRIPLE PACK',
-    categorias: ['Liga MX', 'Internacional', 'Selecciones', 'Retro'],
+    categorias: ['Clubes', 'Selecciones', 'Retro'],
     featured: false,
   },
   {
     id: 'jersey-club',
-    name: 'Jersey Club',
-    subtitle: 'Ultimate Curator\'s Pack',
+    name: 'Poker',
+    subtitle: 'Pack Definitivo del Coleccionista',
     jerseys: 4,
     price: 269900,
     priceDisplay: '$2,699',
     originalPrice: '$4,999',
     tag: 'MEJOR VALOR',
-    categorias: ['Mix (Recomendado)', 'Liga MX', 'Internacional', 'Selecciones', 'Retro'],
+    categorias: ['Mix (Recomendado)', 'Clubes', 'Selecciones', 'Retro'],
     featured: true,
   },
 ]
 
 export default function CajasPage() {
   const [categorias, setCategorias] = useState<Record<string, string>>({
-    debutante: 'Liga MX',
-    doble: 'Liga MX',
-    'hat-trick': 'Internacional',
+    debutante: 'Clubes',
+    doble: 'Clubes',
+    'hat-trick': 'Clubes',
     'jersey-club': 'Mix (Recomendado)',
   })
 
@@ -87,7 +87,7 @@ export default function CajasPage() {
             tu <span className="text-primary-container">Caja</span>
           </h1>
           <p className="max-w-xl text-on-surface-variant font-medium leading-relaxed mx-auto md:mx-0">
-            Mystery drops con autenticidad garantizada. Selecciona tu nivel y categoría para comenzar tu colección técnica.
+            Mystery drops con sorpresa garantizada. Selecciona tu nivel y categoría para comenzar tu colección técnica.
           </p>
         </div>
 

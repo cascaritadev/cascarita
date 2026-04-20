@@ -14,21 +14,21 @@ export const BOX_PRICES: Record<string, { name: string; price: number; descripti
   debutante: {
     name: 'Mystery Box Debutante',
     price: 79900, // centavos MXN = $799.00 MXN
-    description: '1 Jersey auténtico de élite · Envío gratis',
+    description: '1 Jersey de élite · Envío gratis',
   },
   doble: {
-    name: 'Mystery Box Doble',
+    name: 'Mystery Box Doblete',
     price: 158000, // $1,580.00 MXN
-    description: '2 Jerseys auténticos · Envío gratis',
+    description: '2 Jerseys de élite · Envío gratis',
   },
   'hat-trick': {
     name: 'Mystery Box Hat-Trick',
     price: 224900, // $2,249.00 MXN
-    description: '3 Jerseys auténticos · Envío gratis',
+    description: '3 Jerseys de élite · Envío gratis',
   },
   'jersey-club': {
-    name: 'Mystery Box Jersey Club',
+    name: 'Mystery Box Poker',
     price: 269900, // $2,699.00 MXN
-    description: '4 Jerseys auténticos · Envío gratis · Mejor valor',
+    description: '4 Jerseys de élite · Envío gratis · Mejor valor',
   },
 }

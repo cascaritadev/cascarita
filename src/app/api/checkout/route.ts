@@ -9,7 +9,7 @@ const CartItemSchema = z.object({
   boxId: z.enum(['debutante', 'doble', 'hat-trick', 'jersey-club']),
   categoria: z.string().min(1),
   talla: z.string().min(1),
-  tipo: z.string().min(1), // 'ligamx' | 'internacional' | 'selecciones' | 'retro'
+  tipo: z.string().min(1), // 'clubes' | 'selecciones' | 'retro'
   exclusiones: z.array(z.string()).max(5).optional(),
 })
 

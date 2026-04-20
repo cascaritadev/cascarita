@@ -141,7 +141,7 @@ export default function HomePage() {
               </h2>
             </div>
             <p className="max-w-sm text-sm text-on-surface-variant font-medium leading-relaxed">
-              Selecciona el nivel que se adapte a tu pasión. Cada caja es curada con jerseys auténticos.
+              Selecciona el nivel que se adapte a tu pasión.
             </p>
           </div>
 
@@ -178,7 +178,7 @@ export default function HomePage() {
                   {/* Badge de ahorro */}
                   <div className="absolute top-3 left-3 bg-emerald-500 text-white rounded-full w-14 h-14 flex flex-col items-center justify-center shadow-lg z-10">
                     <span className="text-[9px] font-black leading-none uppercase">AHORRAS</span>
-                    <span className="text-sm font-black leading-tight">$700</span>
+                    <span className="text-sm font-black leading-tight">53%</span>
                   </div>
                 </div>
 
@@ -193,9 +193,9 @@ export default function HomePage() {
                 {/* Lista de beneficios */}
                 <ul className="space-y-2 mb-6">
                   {[
-                    '1 jersey premium auténtico',
+                    '1 jersey premium',
                     'Empaque sellado sorpresa',
-                    'Tarjeta de autenticidad',
+                    'Tarjeta de curador con datos técnicos',
                     'Envío gratis incluido',
                   ].map((feat) => (
                     <li key={feat} className="flex items-center gap-2 text-xs font-medium text-on-surface-variant">
@@ -218,11 +218,11 @@ export default function HomePage() {
                   </div>
                   <div className="text-right">
                     <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wide block">Ahorras</span>
-                    <span className="text-xl font-black text-emerald-600">$700</span>
+                    <span className="text-xl font-black text-emerald-600">53%</span>
                   </div>
                 </div>
                 <Link
-                  href="/configurar?box=debutante&categoria=Liga%20MX"
+                  href="/configurar?box=debutante&categoria=Clubes"
                   className="flex items-center justify-between w-full bg-primary text-white px-6 py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-800 transition-colors group/btn"
                 >
                   Quiero Este Kit
@@ -271,7 +271,7 @@ export default function HomePage() {
 
                 <div className="flex flex-col gap-2">
                   <Link
-                    href="/configurar?box=hat-trick&categoria=Internacional"
+                    href="/configurar?box=hat-trick&categoria=Clubes"
                     className="flex items-center justify-between bg-primary text-white px-6 py-4 font-black uppercase tracking-widest text-xs hover:bg-emerald-800 transition-colors group/btn"
                   >
                     Quiero Este Kit
@@ -287,7 +287,7 @@ export default function HomePage() {
             {/* Tier 3: Jersey Club */}
             <div className="md:col-span-6 bg-surface-container-low group border border-zinc-100 overflow-hidden">
               <div className="flex justify-between items-start p-6 md:p-8">
-                <span className="text-xs font-bold tracking-widest text-on-surface-variant uppercase font-label">04 JERSEYS / JERSEY CLUB PACK</span>
+                <span className="text-xs font-bold tracking-widest text-on-surface-variant uppercase font-label">04 JERSEYS / POKER PACK</span>
                 <span className="bg-emerald-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shrink-0 ml-2">AHORRA 46%</span>
               </div>
               <div className="flex flex-col md:flex-row md:gap-8 md:items-center md:px-8 md:pb-8">
@@ -301,8 +301,8 @@ export default function HomePage() {
                   />
                 </div>
                 <div className="space-y-4 p-6 md:p-0">
-                  <h3 className="text-3xl font-black text-on-surface uppercase tracking-tighter font-headline">La Escuadra Completa</h3>
-                  <p className="text-sm text-on-surface-variant">La experiencia definitiva. 4 jerseys auténticos.</p>
+                  <h3 className="text-3xl font-black text-on-surface uppercase tracking-tighter font-headline">Poker</h3>
+                  <p className="text-sm text-on-surface-variant">La experiencia definitiva. 4 jerseys.</p>
                   <div className="flex flex-col">
                     <span className="text-sm text-zinc-400 line-through font-bold">$4,999.00 MXN</span>
                     <span className="text-4xl font-black text-primary font-headline">$2,699.00</span>
@@ -324,7 +324,7 @@ export default function HomePage() {
                 <span className="material-symbols-outlined text-4xl text-primary mb-6">inventory_2</span>
                 <h3 className="text-2xl font-black text-on-surface uppercase tracking-tight mb-4 font-headline">El Protocolo Unboxing</h3>
                 <p className="text-on-surface-variant leading-relaxed mb-6">
-                  Cada entrega es un ritual. Sellado con cinta técnica, envuelto en papel seda y acompañado de una tarjeta de autenticidad.
+                  Cada entrega es un ritual. Sellado con cinta técnica, envuelto en papel seda y acompañado de una tarjeta de curador con datos técnicos.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="border-l-2 border-primary pl-4">

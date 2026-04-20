@@ -8,7 +8,7 @@ export default function FooterActions() {
   async function handleShare() {
     const data = {
       title: 'La Cascarita Jersey Club',
-      text: 'Mystery Boxes de jerseys auténticos. Envío gratis a toda México.',
+      text: 'Mystery Boxes de camisetas de futbol. Envío gratis a toda México.',
       url: window.location.origin,
     }
 
