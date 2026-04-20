@@ -10,7 +10,9 @@ type Order = {
   email: string
   status: string
   boxType: string
+  categoria: string
   talla: string
+  exclusiones: string[]
   amountTotal: number
   trackingNumber: string | null
   trackingUrl: string | null
@@ -192,6 +194,7 @@ export default function AdminPage() {
                 <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Fecha</th>
                 <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Cliente</th>
                 <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Box / Talla</th>
+                <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Categoría / Excl.</th>
                 <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Total</th>
                 <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Status</th>
                 <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">Guía Estafeta</th>
@@ -202,7 +205,7 @@ export default function AdminPage() {
             <tbody>
               {displayed.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-10 text-center text-zinc-400 text-sm">
+                  <td colSpan={8} className="px-4 py-10 text-center text-zinc-400 text-sm">
                     No hay pedidos en esta categoría.
                   </td>
                 </tr>
@@ -229,6 +232,21 @@ export default function AdminPage() {
                   <td className="px-4 py-3 whitespace-nowrap">
                     <p className="font-bold text-xs">{BOX_LABELS[order.boxType] ?? order.boxType}</p>
                     <p className="text-[10px] text-zinc-400 uppercase">{order.talla}</p>
+                  </td>
+
+                  <td className="px-4 py-3">
+                    <p className="font-bold text-xs capitalize">{order.categoria}</p>
+                    {order.exclusiones.length > 0 ? (
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {order.exclusiones.map((eq) => (
+                          <span key={eq} className="bg-red-50 text-red-600 text-[9px] font-bold px-1.5 py-0.5 rounded">
+                            {eq}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-[10px] text-zinc-300 italic">Sin excl.</p>
+                    )}
                   </td>
 
                   <td className="px-4 py-3 whitespace-nowrap">
