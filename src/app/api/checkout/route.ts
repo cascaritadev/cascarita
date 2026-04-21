@@ -11,7 +11,7 @@ const JerseySlotSchema = z.object({
   talla: z.string().min(1),
   tipo: z.string().min(1),
   estampado: z.boolean().optional(),
-  nombreEstampado: z.string().max(6).optional(),
+  nombreEstampado: z.string().max(10).optional(),
   numeroEstampado: z.string().max(2).optional(),
 })
 
@@ -23,7 +23,7 @@ const CartItemSchema = z.object({
   exclusiones: z.array(z.string()).max(5).optional(),
   mensajeRegalo: z.string().max(150).optional(),
   estampado: z.boolean().optional(),
-  nombreEstampado: z.string().max(6).optional(),
+  nombreEstampado: z.string().max(10).optional(),
   numeroEstampado: z.string().max(2).optional(),
   jerseySlots: z.array(JerseySlotSchema).max(4).optional(),
 })

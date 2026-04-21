@@ -361,12 +361,12 @@ function ConfiguradorContent() {
                       {slot.estampado && (
                         <div className="grid grid-cols-2 gap-3 bg-white rounded-lg p-4">
                           <div className="space-y-1">
-                            <label className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant">Nombre <span className="text-zinc-400 normal-case tracking-normal font-normal">(máx. 6)</span></label>
-                            <input type="text" maxLength={6} value={slot.nombreEstampado}
+                            <label className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant">Nombre <span className="text-zinc-400 normal-case tracking-normal font-normal">(máx. 10)</span></label>
+                            <input type="text" maxLength={10} value={slot.nombreEstampado}
                               onChange={e => updateSlot(index, 'nombreEstampado', e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]/g, '').toUpperCase())}
                               placeholder="LOPEZ"
                               className="w-full border-2 border-outline-variant rounded-lg px-3 py-2 text-xs font-black uppercase tracking-widest outline-none focus:border-primary placeholder:text-zinc-300 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case" />
-                            <p className="text-[9px] text-zinc-400">{slot.nombreEstampado.length}/6</p>
+                            <p className="text-[9px] text-zinc-400">{slot.nombreEstampado.length}/10</p>
                           </div>
                           <div className="space-y-1">
                             <label className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant">Número <span className="text-zinc-400 normal-case tracking-normal font-normal">(2 dígitos)</span></label>
@@ -483,12 +483,12 @@ function ConfiguradorContent() {
                 {estampado && (
                   <div className="grid grid-cols-2 gap-4 bg-surface-container p-6 rounded-xl">
                     <div className="space-y-2">
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Nombre <span className="text-zinc-400 font-normal normal-case tracking-normal">(máx. 6 letras)</span></label>
-                      <input type="text" maxLength={6} value={nombreEstampado}
+                      <label className="block text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Nombre <span className="text-zinc-400 font-normal normal-case tracking-normal">(máx. 10 letras)</span></label>
+                      <input type="text" maxLength={10} value={nombreEstampado}
                         onChange={e => setNombreEstampado(e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]/g, '').toUpperCase())}
                         placeholder="LOPEZ"
                         className="w-full border-2 border-outline-variant rounded-lg px-4 py-3 text-sm font-black uppercase tracking-widest outline-none focus:border-primary placeholder:text-zinc-300 placeholder:normal-case placeholder:tracking-normal placeholder:font-normal" />
-                      <p className="text-[9px] text-zinc-400">{nombreEstampado.length}/6</p>
+                      <p className="text-[9px] text-zinc-400">{nombreEstampado.length}/10</p>
                     </div>
                     <div className="space-y-2">
                       <label className="block text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Número <span className="text-zinc-400 font-normal normal-case tracking-normal">(2 dígitos)</span></label>
@@ -536,12 +536,12 @@ function ConfiguradorContent() {
                         {slot.estampado && (
                           <div className="grid grid-cols-2 gap-3 bg-white rounded-lg px-4 py-3 ml-4">
                             <div className="space-y-1">
-                              <label className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant">Nombre <span className="text-zinc-400 normal-case tracking-normal font-normal">(máx. 6)</span></label>
-                              <input type="text" maxLength={6} value={slot.nombreEstampado}
+                              <label className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant">Nombre <span className="text-zinc-400 normal-case tracking-normal font-normal">(máx. 10)</span></label>
+                              <input type="text" maxLength={10} value={slot.nombreEstampado}
                                 onChange={e => updateSlot(i, 'nombreEstampado', e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]/g, '').toUpperCase())}
                                 placeholder="LOPEZ"
                                 className="w-full border-2 border-outline-variant rounded-lg px-3 py-2 text-xs font-black uppercase tracking-widest outline-none focus:border-primary placeholder:text-zinc-300 placeholder:font-normal placeholder:tracking-normal placeholder:normal-case" />
-                              <p className="text-[9px] text-zinc-400">{slot.nombreEstampado.length}/6</p>
+                              <p className="text-[9px] text-zinc-400">{slot.nombreEstampado.length}/10</p>
                             </div>
                             <div className="space-y-1">
                               <label className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant">Número <span className="text-zinc-400 normal-case tracking-normal font-normal">(2 dígitos)</span></label>
