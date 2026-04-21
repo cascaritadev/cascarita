@@ -288,7 +288,7 @@ export default function HomePage() {
             <div className="md:col-span-6 bg-surface-container-low group border border-zinc-100 overflow-hidden">
               <div className="flex justify-between items-start p-6 md:p-8">
                 <span className="text-xs font-bold tracking-widest text-on-surface-variant uppercase font-label">04 JERSEYS / POKER PACK</span>
-                <span className="bg-emerald-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shrink-0 ml-2">AHORRA 46%</span>
+                <span className="bg-emerald-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest shrink-0 ml-2">AHORRA 54%</span>
               </div>
               <div className="flex flex-col md:flex-row md:gap-8 md:items-center md:px-8 md:pb-8">
                 <div className="relative w-full aspect-[3/4] md:w-1/2 md:aspect-square overflow-hidden">
