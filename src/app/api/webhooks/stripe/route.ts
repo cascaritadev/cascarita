@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
       estampado: firstItem.estampado ?? false,
       nombreEstampado: firstItem.nombreEstampado || null,
       numeroEstampado: firstItem.numeroEstampado || null,
-      jerseySlots: firstItem.jerseySlots?.length ? firstItem.jerseySlots : null,
+      jerseySlots: firstItem.jerseySlots?.length ? firstItem.jerseySlots : undefined,
       amountSubtotal,
       amountDiscount: amountDiscount || null,
       amountTotal: session.amount_total ?? 0,
