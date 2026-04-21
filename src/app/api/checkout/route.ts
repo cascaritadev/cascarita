@@ -2,10 +2,18 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
 import { getStripe, BOX_PRICES } from '@/lib/stripe'
-import { getBoxPrice } from '@/lib/pricing'
+import { getBoxPrice, getMixBoxPrice } from '@/lib/pricing'
 import { authOptions } from '@/lib/auth'
 
 const ESTAMPADO_PRICE = 20000 // $200 MXN en centavos
+
+const JerseySlotSchema = z.object({
+  talla: z.string().min(1),
+  tipo: z.string().min(1),
+  estampado: z.boolean().optional(),
+  nombreEstampado: z.string().max(6).optional(),
+  numeroEstampado: z.string().max(2).optional(),
+})
 
 const CartItemSchema = z.object({
   boxId: z.enum(['debutante', 'doble', 'hat-trick', 'jersey-club']),
@@ -17,6 +25,7 @@ const CartItemSchema = z.object({
   estampado: z.boolean().optional(),
   nombreEstampado: z.string().max(6).optional(),
   numeroEstampado: z.string().max(2).optional(),
+  jerseySlots: z.array(JerseySlotSchema).max(4).optional(),
 })
 
 const CheckoutSchema = z.object({
@@ -86,8 +95,16 @@ export async function POST(req: NextRequest) {
     const FREE_PROMO_AMOUNT = 1500 // centavos = $15.00 MXN
     const line_items = items.map((item) => {
       const boxInfo = BOX_PRICES[item.boxId]
-      const baseAmount = isFreePromo ? FREE_PROMO_AMOUNT : getBoxPrice(item.boxId, item.tipo)
-      const unitAmount = baseAmount + (item.estampado ? ESTAMPADO_PRICE : 0)
+      // Modo mix (tipo='mix' con jerseySlots): precio base + surcharge por slots retro
+      // Modos preset (debutante/clubes/selecciones/retro): getBoxPrice ya incluye surcharge retro
+      const baseAmount = isFreePromo
+        ? FREE_PROMO_AMOUNT
+        : item.jerseySlots?.length
+          ? getMixBoxPrice(item.boxId, item.jerseySlots)
+          : getBoxPrice(item.boxId, item.tipo)
+      const slotEstampadoCount = (item.jerseySlots ?? []).filter((s) => s.estampado).length
+      const topEstampado = !item.jerseySlots?.length && item.estampado ? 1 : 0
+      const unitAmount = baseAmount + (slotEstampadoCount + topEstampado) * ESTAMPADO_PRICE
       return {
         quantity: 1,
         price_data: {
@@ -97,8 +114,9 @@ export async function POST(req: NextRequest) {
             name: boxInfo.name + (item.estampado ? ' + Estampado' : ''),
             description: [
               isFreePromo ? 'Precio especial con código 100% de descuento' : boxInfo.description,
-              `Tipo: ${item.tipo}`,
-              `Talla: ${item.talla}`,
+              item.jerseySlots?.length
+                ? item.jerseySlots.map((s, i) => `J${i + 1}: ${s.tipo} ${s.talla}`).join(' · ')
+                : `Tipo: ${item.tipo} · Talla: ${item.talla}`,
               item.estampado ? `Estampado: ${item.nombreEstampado ?? '—'} #${item.numeroEstampado ?? '—'} (+$200)` : '',
               item.exclusiones?.length ? `Sin: ${item.exclusiones.join(', ')}` : '',
               item.mensajeRegalo ? `Regalo: ${item.mensajeRegalo}` : '',
@@ -126,6 +144,7 @@ export async function POST(req: NextRequest) {
           estampado: i.estampado ?? false,
           nombreEstampado: i.nombreEstampado ?? '',
           numeroEstampado: i.numeroEstampado ?? '',
+          jerseySlots: i.jerseySlots ?? [],
         }))
       ),
       promoCode: promoMetadata.code ?? '',

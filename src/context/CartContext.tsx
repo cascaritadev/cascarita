@@ -14,6 +14,7 @@ export type CartItem = {
   estampado?: boolean
   nombreEstampado?: string
   numeroEstampado?: string
+  jerseySlots?: { talla: string; tipo: string; estampado?: boolean; nombreEstampado?: string; numeroEstampado?: string }[]
   price: number
   priceDisplay: string
   jerseys: number

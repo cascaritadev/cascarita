@@ -80,6 +80,7 @@ export async function GET(req: NextRequest) {
       estampado: true,
       nombreEstampado: true,
       numeroEstampado: true,
+      jerseySlots: true,
       amountTotal: true,
       trackingNumber: true,
       trackingUrl: true,

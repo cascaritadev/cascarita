@@ -102,6 +102,7 @@ export default function CarritoPage() {
             estampado: item.estampado,
             nombreEstampado: item.nombreEstampado,
             numeroEstampado: item.numeroEstampado,
+            jerseySlots: item.jerseySlots,
           })),
           ...(promo ? { promoCode: promo.code } : {}),
         }),
@@ -184,11 +185,24 @@ export default function CarritoPage() {
                       <h3 className="font-headline font-black text-base uppercase tracking-tight leading-tight mb-2">
                         {item.boxName}
                       </h3>
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-bold uppercase tracking-wide text-on-surface-variant">
-                        <span>Talla: <span className="text-on-surface">{item.talla}</span></span>
-                        <span>Tipo: <span className="text-on-surface capitalize">{item.tipo}</span></span>
-                        <span>{item.jerseys} jersey{item.jerseys > 1 ? 's' : ''}</span>
-                      </div>
+                      {item.jerseySlots?.length ? (
+                        <div className="space-y-0.5">
+                          {item.jerseySlots.map((s, i) => (
+                            <div key={i} className="text-[11px] font-bold uppercase tracking-wide text-on-surface-variant">
+                              <span>J{i + 1}: <span className="text-on-surface capitalize">{s.tipo}</span> <span className="text-on-surface">{s.talla}</span></span>
+                              {s.estampado && (
+                                <span className="ml-2 text-primary font-black">· Estampado {s.nombreEstampado ? `${s.nombreEstampado}` : ''}{s.numeroEstampado ? ` #${s.numeroEstampado}` : ''} (+$200)</span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-bold uppercase tracking-wide text-on-surface-variant">
+                          <span>Talla: <span className="text-on-surface">{item.talla}</span></span>
+                          <span>Tipo: <span className="text-on-surface capitalize">{item.tipo}</span></span>
+                          <span>{item.jerseys} jersey{item.jerseys > 1 ? 's' : ''}</span>
+                        </div>
+                      )}
                       {item.exclusiones.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-1">
                           <span className="text-[10px] font-bold uppercase text-zinc-400 mr-1">Excl:</span>

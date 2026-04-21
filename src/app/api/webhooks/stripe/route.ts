@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     const meta = session.metadata ?? {}
 
     // Parsear items del metadata
-    let firstItem: { boxId: string; categoria: string; talla: string; exclusiones: string; tipo?: string; mensajeRegalo?: string; estampado?: boolean; nombreEstampado?: string; numeroEstampado?: string } = { boxId: meta.boxId ?? '', categoria: meta.categoria ?? '', talla: meta.talla ?? '', exclusiones: meta.exclusiones ?? '' }
+    let firstItem: { boxId: string; categoria: string; talla: string; exclusiones: string; tipo?: string; mensajeRegalo?: string; estampado?: boolean; nombreEstampado?: string; numeroEstampado?: string; jerseySlots?: { talla: string; tipo: string }[] } = { boxId: meta.boxId ?? '', categoria: meta.categoria ?? '', talla: meta.talla ?? '', exclusiones: meta.exclusiones ?? '' }
     if (meta.items) {
       try {
         const parsed = JSON.parse(meta.items)
@@ -85,6 +85,7 @@ export async function POST(req: NextRequest) {
       estampado: firstItem.estampado ?? false,
       nombreEstampado: firstItem.nombreEstampado || null,
       numeroEstampado: firstItem.numeroEstampado || null,
+      jerseySlots: firstItem.jerseySlots?.length ? firstItem.jerseySlots : null,
       amountSubtotal,
       amountDiscount: amountDiscount || null,
       amountTotal: session.amount_total ?? 0,
@@ -118,6 +119,11 @@ export async function POST(req: NextRequest) {
         categoria: firstItem.tipo ?? firstItem.categoria ?? '',
         talla: firstItem.talla ?? '',
         exclusiones: firstItem.exclusiones ? firstItem.exclusiones.split(',').filter(Boolean) : [],
+        mensajeRegalo: firstItem.mensajeRegalo || null,
+        estampado: firstItem.estampado ?? false,
+        nombreEstampado: firstItem.nombreEstampado || null,
+        numeroEstampado: firstItem.numeroEstampado || null,
+        jerseySlots: firstItem.jerseySlots ?? null,
         amountTotal: session.amount_total ?? 0,
         amountSubtotal,
         amountDiscount: amountDiscount || null,

@@ -1,35 +1,37 @@
-// Precios en centavos MXN, organizados por tipo de jersey y por caja
+// Precios en centavos MXN
 
-export const PRICES_BY_TIPO: Record<string, Record<string, number>> = {
-  clubes: {
-    debutante: 79900,    // $799
-    doble: 158000,       // $1,580
-    'hat-trick': 224900, // $2,249
-    'jersey-club': 269900, // $2,699
-  },
-  selecciones: {
-    debutante: 79900,    // $799
-    doble: 158000,       // $1,580
-    'hat-trick': 224900, // $2,249
-    'jersey-club': 269900, // $2,699
-  },
-  retro: {
-    debutante: 79900,    // $799
-    doble: 158000,       // $1,580
-    'hat-trick': 224900, // $2,249
-    'jersey-club': 269900, // $2,699
-  },
-  actual: {
-    debutante: 79900,
-    doble: 158000,
-    'hat-trick': 224900,
-    'jersey-club': 269900,
-  },
+const BASE_PRICES: Record<string, number> = {
+  debutante: 79900,
+  doble: 158000,
+  'hat-trick': 224900,
+  'jersey-club': 269900,
 }
 
+const BOX_JERSEY_COUNT: Record<string, number> = {
+  debutante: 1,
+  doble: 2,
+  'hat-trick': 3,
+  'jersey-club': 4,
+}
+
+const RETRO_SURCHARGE_PER_JERSEY = 20000 // $200 MXN
+
+export const RETRO_SURCHARGE = RETRO_SURCHARGE_PER_JERSEY
+
 export function getBoxPrice(boxId: string, tipo: string): number {
-  const tipoKey = PRICES_BY_TIPO[tipo] ? tipo : 'actual'
-  return PRICES_BY_TIPO[tipoKey][boxId] ?? PRICES_BY_TIPO.actual.debutante
+  const base = BASE_PRICES[boxId] ?? BASE_PRICES.debutante
+  if (tipo === 'retro') {
+    const count = BOX_JERSEY_COUNT[boxId] ?? 1
+    return base + count * RETRO_SURCHARGE_PER_JERSEY
+  }
+  return base
+}
+
+// Para modo "Configurar": base + retro surcharge por slot retro
+export function getMixBoxPrice(boxId: string, slots: { tipo: string }[]): number {
+  const base = BASE_PRICES[boxId] ?? BASE_PRICES.debutante
+  const retroCount = slots.filter((s) => s.tipo === 'retro').length
+  return base + retroCount * RETRO_SURCHARGE_PER_JERSEY
 }
 
 export function formatMXN(centavos: number): string {

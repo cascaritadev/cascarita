@@ -85,8 +85,9 @@ model Order {
   exclusiones     String[]    // lista de equipos excluidos
   mensajeRegalo   String?     // mensaje para regalo (max 150 chars)
   estampado       Boolean     @default(false) // jersey estampado +$200
-  nombreEstampado String?     // nombre para el estampado (max 5 letras)
+  nombreEstampado String?     // nombre para el estampado (max 6 letras)
   numeroEstampado String?     // número para el estampado (2 dígitos)
+  jerseySlots     Json?       // [{talla, tipo}] para cajas multi-jersey
 
   // Precio (en centavos MXN)
   amountSubtotal  Int?        // precio antes de descuento

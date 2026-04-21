@@ -17,6 +17,7 @@ type Order = {
   estampado: boolean
   nombreEstampado: string | null
   numeroEstampado: string | null
+  jerseySlots: { talla: string; tipo: string; estampado?: boolean; nombreEstampado?: string; numeroEstampado?: string }[] | null
   amountTotal: number
   trackingNumber: string | null
   trackingUrl: string | null
@@ -51,6 +52,14 @@ const BOX_LABELS: Record<string, string> = {
   doble:         'Doblete',
   'hat-trick':   'Hat-Trick',
   'jersey-club': 'Poker',
+}
+
+const TIPO_LABELS: Record<string, string> = {
+  clubes:      'Clubes',
+  selecciones: 'Selecciones',
+  retro:       'Retro',
+  mix:         'Personalizado',
+  actual:      'Clubes',
 }
 
 const STATUSES = ['PENDING', 'PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED']
@@ -233,14 +242,46 @@ export default function AdminPage() {
                     )}
                   </td>
 
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    <p className="font-bold text-xs">{BOX_LABELS[order.boxType] ?? order.boxType}</p>
-                    <p className="text-[10px] text-zinc-400 uppercase">{order.talla}</p>
+                  <td className="px-4 py-3">
+                    <p className="font-bold text-xs whitespace-nowrap">{BOX_LABELS[order.boxType] ?? order.boxType}</p>
+                    {order.jerseySlots?.length ? (
+                      <div className="mt-1 space-y-0.5">
+                        {order.jerseySlots.map((s, i) => (
+                          <div key={i}>
+                            <p className="text-[10px] text-zinc-500 uppercase whitespace-nowrap">
+                              J{i + 1}: <span className="font-bold text-zinc-700">{s.tipo}</span> {s.talla}
+                            </p>
+                            {s.estampado && (
+                              <p className="text-[9px] text-primary font-black">
+                                Estampado: {s.nombreEstampado ?? '—'} #{s.numeroEstampado ?? '—'}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-[10px] text-zinc-400 uppercase">{order.talla}</p>
+                    )}
                   </td>
 
                   <td className="px-4 py-3">
-                    <p className="font-bold text-xs capitalize">{order.categoria}</p>
-                    {order.estampado && (
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <p className="font-bold text-xs capitalize">
+                        {TIPO_LABELS[order.categoria] ?? order.categoria}
+                      </p>
+                      {order.categoria === 'mix' && (
+                        <span className="text-[9px] font-black uppercase bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">
+                          Config.
+                        </span>
+                      )}
+                      {order.categoria === 'retro' && (
+                        <span className="text-[9px] font-black uppercase bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">
+                          +$200/jersey
+                        </span>
+                      )}
+                    </div>
+                    {/* Estampado top-level (debutante / preset) — no aplica en mix */}
+                    {order.estampado && !order.jerseySlots?.length && (
                       <div className="mt-1 space-y-0.5">
                         <span className="inline-block bg-primary/10 text-primary text-[9px] font-black px-1.5 py-0.5 rounded">
                           ESTAMPADO

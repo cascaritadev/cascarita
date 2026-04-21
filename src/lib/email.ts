@@ -19,6 +19,14 @@ function formatMXN(centavos: number) {
   return '$' + (centavos / 100).toLocaleString('es-MX', { minimumFractionDigits: 2 }) + ' MXN'
 }
 
+type JerseySlotEmail = {
+  talla: string
+  tipo: string
+  estampado?: boolean
+  nombreEstampado?: string
+  numeroEstampado?: string
+}
+
 type OrderEmailData = {
   orderId: string
   email: string
@@ -27,6 +35,11 @@ type OrderEmailData = {
   categoria: string
   talla: string
   exclusiones: string[]
+  mensajeRegalo?: string | null
+  estampado?: boolean
+  nombreEstampado?: string | null
+  numeroEstampado?: string | null
+  jerseySlots?: JerseySlotEmail[] | null
   amountTotal: number
   amountSubtotal: number | null
   amountDiscount: number | null
@@ -39,6 +52,38 @@ export async function sendOrderConfirmationEmail(order: OrderEmailData) {
   const nombre = order.shippingName?.split(' ')[0] ?? 'Cliente'
   const boxName = BOX_NAMES[order.boxType] ?? order.boxType
   const shortId = order.orderId.slice(-8).toUpperCase()
+
+  // Detalle de jerseys: multi-jersey con slots o debutante/retro simple
+  const jerseyDetailRows = order.jerseySlots?.length
+    ? order.jerseySlots.map((s, i) => `
+        <tr>
+          <td colspan="2" style="padding:2px 0;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#444444;">
+            JERSEY ${i + 1}: ${s.tipo.toUpperCase()} · ${s.talla.toUpperCase()}
+            ${s.estampado
+              ? ` &nbsp;<span style="color:#003625;font-weight:700;">· ESTAMPADO: ${(s.nombreEstampado ?? '—').toUpperCase()} #${s.numeroEstampado ?? '—'} (+$200)</span>`
+              : ''}
+          </td>
+        </tr>`).join('')
+    : `<tr>
+        <td colspan="2" style="padding:0 0 12px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#888888;">
+          TIPO: ${order.categoria.toUpperCase()} &nbsp;·&nbsp; TALLA: ${order.talla.toUpperCase()}
+          ${order.exclusiones.length ? `<br>SIN: ${order.exclusiones.join(', ').toUpperCase()}` : ''}
+          ${order.estampado
+            ? `<br><span style="color:#003625;font-weight:700;">ESTAMPADO: ${(order.nombreEstampado ?? '—').toUpperCase()} #${order.numeroEstampado ?? '—'} (+$200)</span>`
+            : ''}
+        </td>
+      </tr>`
+
+  const mensajeRow = order.mensajeRegalo
+    ? `<tr>
+        <td colspan="2" style="padding:10px 0;border-top:1px dashed #e5e5e5;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#888888;">
+          🎁 MENSAJE DE REGALO
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding:0 0 10px;font-size:12px;color:#444444;font-style:italic;">"${order.mensajeRegalo}"</td>
+      </tr>`
+    : ''
 
   const html = `
 <!DOCTYPE html>
@@ -88,15 +133,17 @@ export async function sendOrderConfirmationEmail(order: OrderEmailData) {
                 <td style="padding:12px 0 4px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#888888;text-align:right;">PRECIO</td>
               </tr>
               <tr>
-                <td style="padding:0 0 4px;font-size:13px;font-weight:700;text-transform:uppercase;color:#0a0a0a;">${boxName.toUpperCase()}</td>
-                <td style="padding:0 0 4px;font-size:13px;font-weight:700;color:#0a0a0a;text-align:right;">${order.amountSubtotal ? formatMXN(order.amountSubtotal) : ''}</td>
+                <td style="padding:0 0 8px;font-size:13px;font-weight:700;text-transform:uppercase;color:#0a0a0a;">${boxName.toUpperCase()}</td>
+                <td style="padding:0 0 8px;font-size:13px;font-weight:700;color:#0a0a0a;text-align:right;">${order.amountSubtotal ? formatMXN(order.amountSubtotal) : ''}</td>
               </tr>
+              ${jerseyDetailRows}
+              ${order.jerseySlots?.length && order.exclusiones.length ? `
               <tr>
-                <td colspan="2" style="padding:0 0 12px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#888888;">
-                  TIPO: ${order.categoria.toUpperCase()} &nbsp;·&nbsp; TALLA: ${order.talla.toUpperCase()}
-                  ${order.exclusiones.length ? `<br>SIN: ${order.exclusiones.join(', ').toUpperCase()}` : ''}
+                <td colspan="2" style="padding:2px 0 10px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#888888;">
+                  SIN: ${order.exclusiones.join(', ').toUpperCase()}
                 </td>
-              </tr>
+              </tr>` : ''}
+              ${mensajeRow}
 
               ${order.amountDiscount && order.amountDiscount > 0 ? `
               <tr>
