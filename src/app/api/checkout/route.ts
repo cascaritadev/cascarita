@@ -111,13 +111,15 @@ export async function POST(req: NextRequest) {
           currency: 'mxn',
           unit_amount: unitAmount,
           product_data: {
-            name: boxInfo.name + (item.estampado ? ' + Estampado' : ''),
+            name: boxInfo.name + (slotEstampadoCount + topEstampado > 0 ? ` + Estampado x${slotEstampadoCount + topEstampado}` : ''),
             description: [
               isFreePromo ? 'Precio especial con código 100% de descuento' : boxInfo.description,
               item.jerseySlots?.length
-                ? item.jerseySlots.map((s, i) => `J${i + 1}: ${s.tipo} ${s.talla}`).join(' · ')
+                ? item.jerseySlots.map((s, i) =>
+                    `J${i + 1}: ${s.tipo} ${s.talla}${s.estampado ? ` [Est: ${s.nombreEstampado ?? '—'} #${s.numeroEstampado ?? '—'}]` : ''}`
+                  ).join(' · ')
                 : `Tipo: ${item.tipo} · Talla: ${item.talla}`,
-              item.estampado ? `Estampado: ${item.nombreEstampado ?? '—'} #${item.numeroEstampado ?? '—'} (+$200)` : '',
+              !item.jerseySlots?.length && item.estampado ? `Estampado: ${item.nombreEstampado ?? '—'} #${item.numeroEstampado ?? '—'} (+$200)` : '',
               item.exclusiones?.length ? `Sin: ${item.exclusiones.join(', ')}` : '',
               item.mensajeRegalo ? `Regalo: ${item.mensajeRegalo}` : '',
             ]
